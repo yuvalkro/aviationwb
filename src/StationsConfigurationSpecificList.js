@@ -12,8 +12,9 @@ class StationsConfigurationsList extends React.Component{
 
   constructor(props) {
      super(props)
-    this.state = {stations : []}
-
+    
+     this.state = {stations : []}
+    
      var storage = new Storage({
        // maximum capacity, default 1000
        size: 1000,
@@ -21,23 +22,16 @@ class StationsConfigurationsList extends React.Component{
        defaultExpires: null,
        enableCache: true
      })
-     // getIdsForKey
-     storage.getIdsForKey('stationsConfiguration').then(ids => {
-       this.setState({stationsConfigurations : ids});
-       console.log(this.state.stationsConfigurations)
-     });
-
-
+console.log(props.navigation.state.params.stationConfigurationName);
      // load
     storage.load({
         key: 'stationsConfiguration',
-        id: 'Main Profile'
+        id: props.navigation.state.params.stationConfigurationName
     }).then(ret => {
         // found data goes to then()
+        console.log(ret);
        this.setState({stations : ret.stations});
     }).catch(err => {
-        // any exception including data not found
-        // goes to catch()
         console.warn(err.message);
         switch (err.name) {
             case 'NotFoundError':
@@ -52,13 +46,8 @@ class StationsConfigurationsList extends React.Component{
 
   }
   static navigationOptions = ({ navigation }) => ({
-    title: ` ${navigation.state.params.stationConfugrationName}`,
-    headerRight: (
-      <Button
-        title={'+'}
-        onPress={() => navigation.navigate('BuildTailNumber')}
-      />
-    ),
+    title: ` ${navigation.state.params.stationConfigurationName}`,
+   
   });
 
   render(){
@@ -68,15 +57,18 @@ class StationsConfigurationsList extends React.Component{
       <View>
       <Button
         onPress={() => navigate('StationConfigurationForm')}
-        title="Add Stations Configuration"
+        title="Add Station"
         />
           <FlatList
+            //keyExtractor={item => item.stationName}
             data={this.state.stations}
             renderItem={ ({item}) =>
-                <TouchableOpacity onPress={() => navigate('StationConfigurationForm',{station :item})}>
-                <Text style={{fontSize:18, padding: 8}}>{item.stationName}</Text>
-                  </TouchableOpacity>
-          }
+                <TouchableOpacity onPress={() => 
+                  navigate('StationConfigurationForm',
+                  {stationData :item , stationConfigurationName : params.stationConfigurationName})}>
+                  <Text style={{padding: 8}}>{item.stationName}</Text>
+                </TouchableOpacity>
+            }
           />
       </View>
     )

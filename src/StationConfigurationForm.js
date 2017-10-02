@@ -8,7 +8,7 @@ import { AsyncStorage } from 'react-native';
 
 
   // var stationConfiguration = {
-  //     name: 'Main profile',
+  //     name: 'Main Profile ',
   //     stations: [
   //         {
   //         stationName : 'Pilot',
@@ -31,21 +31,27 @@ import { AsyncStorage } from 'react-native';
 class StationConfigurationForm extends React.Component{
   static navigationOptions  = {title : 'Station',};
 
-
-
   constructor(props) {
      super(props)
-     this.state = {
-       stationName:'',
-       stationType:'',
-       maxWeight:'',
-       stationWeightUnit:'',
-       stationArm:''
-     }
+
+     const { params } = this.props.navigation.state;
+ 
+     if(params!=null)
+        this.state = params.stationData;          
+      else
+      this.state = {
+        stationName:'',
+        stationType:'',
+        maxWeight:'',
+        stationWeightUnit:'',
+        stationArm:''
+      }         
+          
   }
 
   formSubmit(){
-  var stationConfiguration ;
+    
+
     //save station to local storage
     var storage = new Storage({
     	// maximum capacity, default 1000
@@ -57,19 +63,30 @@ class StationConfigurationForm extends React.Component{
 
 
   // load
+
+  var ScKey = this.props.navigation.state.params.stationConfigurationName
+
   storage.load({
      key: 'stationsConfiguration',
-     id: 'Main Profile'
+     id: ScKey
       }).then(ret => {
-         // found data goes to then()
-         console.log("ok1111");
-         console.log(ret);
-    stationConfiguration = ret;
-    console.log("ok2222");
-    console.log(stationConfiguration);
+         // found data goes to then()       
+        stationConfiguration = ret;
+
+        stationConfiguration.stations.push(this.state);
+       
+        storage.save({
+          key: 'stationsConfiguration', 
+          id: ScKey,	  
+          data: stationConfiguration,
+          expires: null
+      });
+
+      const { navigate } = this.props.navigation;      
+      navigate('StationsConfigurationSpecificList',{stationConfigurationName :ScKey});
+
+
       }).catch(err => {
-         // any exception including data not found
-         // goes to catch()
          console.warn(err.message);
          switch (err.name) {
              case 'NotFoundError':
@@ -80,20 +97,6 @@ class StationConfigurationForm extends React.Component{
                  break;
          }
       });
-
-    stationConfiguration.stations.push(this.state);
-
-    storage.save({
-      key: 'stationsConfiguration',  // Note: Do not use underscore("_") in key!
-      id: 'Main Profile',	  // Note: Do not use underscore("_") in id!
-      data: stationConfiguration,
-      expires: null
-  });
-
-  //console.log(stationConfiguration);
-
-
-
   }
 
   render(){

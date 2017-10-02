@@ -22,19 +22,13 @@ class StationsConfigurationsList extends React.Component{
      // getIdsForKey
      storage.getIdsForKey('stationsConfiguration').then(ids => {
        this.setState({stationsConfigurations : ids});
-       console.log(this.state.stationsConfigurations)
+       console.log(this.state.stationsConfigurations);
      });
 
 
   }
   static navigationOptions = ({ navigation }) => ({
-    title: `Stations Configurations - ${navigation.state.params.airplaneModel}`,
-    headerRight: (
-      <Button
-        title={'+'}
-        onPress={() => navigation.navigate('BuildTailNumber')}
-      />
-    ),
+    title: `Stations Configurations `,
   });
 
   render(){
@@ -44,12 +38,12 @@ class StationsConfigurationsList extends React.Component{
       <View>
       <Button
         onPress={() => navigate('StationConfigurationForm')}
-        title="Add Stations Configuration"
+        title="Add Profile"
         />
           <FlatList
             data={this.state.stationsConfigurations}
             renderItem={ ({item}) =>
-                <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{stationConfugrationName :item})}>
+                <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{stationConfigurationName :item})}>
                 <Text style={{fontSize:18, padding: 8}}>{item}</Text>
                   </TouchableOpacity>
           }

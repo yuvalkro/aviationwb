@@ -6,11 +6,13 @@ import { AsyncStorage } from 'react-native';
 
 
 
+
+
 class StationsConfigurationsList extends React.Component{
 
   constructor(props) {
      super(props)
-    this.state = {stationsConfigurations : []}
+    this.state = {stations : []}
 
      var storage = new Storage({
        // maximum capacity, default 1000
@@ -26,9 +28,31 @@ class StationsConfigurationsList extends React.Component{
      });
 
 
+     // load
+    storage.load({
+        key: 'stationsConfiguration',
+        id: 'Main Profile'
+    }).then(ret => {
+        // found data goes to then()
+       this.setState({stations : ret.stations});
+    }).catch(err => {
+        // any exception including data not found
+        // goes to catch()
+        console.warn(err.message);
+        switch (err.name) {
+            case 'NotFoundError':
+                // TODO;
+                break;
+            case 'ExpiredError':
+                // TODO
+                break;
+        }
+    });
+
+
   }
   static navigationOptions = ({ navigation }) => ({
-    title: `Stations Configurations - ${navigation.state.params.airplaneModel}`,
+    title: ` ${navigation.state.params.stationConfugrationName}`,
     headerRight: (
       <Button
         title={'+'}
@@ -47,10 +71,10 @@ class StationsConfigurationsList extends React.Component{
         title="Add Stations Configuration"
         />
           <FlatList
-            data={this.state.stationsConfigurations}
+            data={this.state.stations}
             renderItem={ ({item}) =>
-                <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{stationConfugrationName :item})}>
-                <Text style={{fontSize:18, padding: 8}}>{item}</Text>
+                <TouchableOpacity onPress={() => navigate('StationConfigurationForm',{station :item})}>
+                <Text style={{fontSize:18, padding: 8}}>{item.stationName}</Text>
                   </TouchableOpacity>
           }
           />

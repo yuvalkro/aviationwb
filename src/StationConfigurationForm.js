@@ -7,62 +7,98 @@ import { AsyncStorage } from 'react-native';
 
 
 
+  // var stationConfiguration = {
+  //     name: 'Main profile',
+  //     stations: [
+  //         {
+  //         stationName : 'Pilot',
+  //         stationType : 'Seat',
+  //         stationWeightUnit : 'Kilogram',
+  //         maxWeight   : '100',
+  //         stationArm  :'43'
+  //       },
+  //       {
+  //       stationName : 'Co-Pilot',
+  //       stationType : 'Seat',
+  //       stationWeightUnit : 'Kilogram',
+  //       maxWeight   : '120',
+  //       stationArm  :'65'
+  //     }
+  //   ]
+  // };
+
+
 class StationConfigurationForm extends React.Component{
   static navigationOptions  = {title : 'Station',};
+
+
 
   constructor(props) {
      super(props)
      this.state = {
-       stationArm:'',
        stationName:'',
        stationType:'',
        maxWeight:'',
-       stationWeightUnit:''       ,
+       stationWeightUnit:'',
+       stationArm:''
      }
   }
 
   formSubmit(){
+  var stationConfiguration ;
     //save station to local storage
     var storage = new Storage({
     	// maximum capacity, default 1000
     	size: 1000,
     	storageBackend: AsyncStorage,
     	defaultExpires: null,
-    	enableCache: true,
-    	// if data was not found in storage or expired,
-    	// the corresponding sync method will be invoked and return
-    	// the latest data.
-    	sync : {
-    		// we'll talk about the details later.
-    	}
+    	enableCache: true
     })
 
-    // Save something with key only.
-    // Something more unique, and constantly being used.
-    // They are permanently stored unless you remove.
+
+  // load
+  storage.load({
+     key: 'stationsConfiguration',
+     id: 'Main Profile'
+      }).then(ret => {
+         // found data goes to then()
+         console.log("ok1111");
+         console.log(ret);
+    stationConfiguration = ret;
+    console.log("ok2222");
+    console.log(stationConfiguration);
+      }).catch(err => {
+         // any exception including data not found
+         // goes to catch()
+         console.warn(err.message);
+         switch (err.name) {
+             case 'NotFoundError':
+                 // TODO;
+                 break;
+             case 'ExpiredError':
+                 // TODO
+                 break;
+         }
+      });
+
+    stationConfiguration.stations.push(this.state);
+
     storage.save({
-    	key: 'stationCnonfiguration',   // Note: Do not use underscore("_") in key!
-    	data: {
-    		models: [
-                  {key:'Cessna 120',tailNumbers :[{key:'N1234'},{key:'N9234'},{key:'N1217'},{key:'N1288'}]},
-                  {key:'Cessna 150a',tailNumbers :[{key:'P1234'},{key:'N9234'},{key:'N1217'}]},
-                  {key:'Cessna 172P',tailNumbers :[{key:'A1234'},{key:'N9234'}]},
-                  {key:'Cessna 180',tailNumbers :[{key:'Z1234'}]},
-                ]
-    	},
+      key: 'stationsConfiguration',  // Note: Do not use underscore("_") in key!
+      id: 'Main Profile',	  // Note: Do not use underscore("_") in id!
+      data: stationConfiguration,
+      expires: null
+  });
 
-    	// if not specified, the defaultExpires will be applied instead.
-    	// if set to null, then it will never expire.
-    	expires: 1000 * 3600
-    });
+  //console.log(stationConfiguration);
 
-    this.setState({...this.state,stationName:'Co-Pilot seat'});
+
 
   }
 
   render(){
     return(
-      <View style={{padding:80}}>
+      <View style={{padding:2}}>
       <Card>
         <CardSection>
           <Input
@@ -75,7 +111,7 @@ class StationConfigurationForm extends React.Component{
         <CardSection>
           <PickerComp
           label="Station Type"
-          itemsData={[ 'Seat', 'Baggage', 'Fuel' ]}
+          itemsData={[ 'Crew', 'Passengers', 'Baggage' ,'Fluids' ,'Other' ,'Moving','Fuel']}
           onChangeText={(text) => this.setState({stationType: text})}
           value={this.state.stationType}
           />

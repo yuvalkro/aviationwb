@@ -4,6 +4,8 @@ import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
 
+import Reactotron from 'reactotron-react-native'
+
 
 
 var storage = new Storage({
@@ -56,7 +58,10 @@ class HomeScreen extends React.Component{
     super(props);
     this.state = {airplanesModels: []};
   }
-  static navigationOptions  = {title : 'Aviation W&B Calculator',};
+  static navigationOptions  = {
+		title : 'Aviation W&B Calculator',
+ 		headerTitleStyle: {alignSelf: 'center'},
+};
 
   componentWillMount(){
 
@@ -102,6 +107,7 @@ class HomeScreen extends React.Component{
   }
 
   render(){
+		Reactotron.log('hello rendering world');
     const { navigate } = this.props.navigation;
     return(
       <View>
@@ -121,6 +127,7 @@ class HomeScreen extends React.Component{
                   <Text style={{fontSize:18, padding: 8}}>{item.key}</Text>
                 </TouchableOpacity>
               }
+							keyExtractor={(item, index) => index}
             />
       </View>
     )

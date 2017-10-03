@@ -12,9 +12,9 @@ class StationsConfigurationsList extends React.Component{
 
   constructor(props) {
      super(props)
-    
+
      this.state = {stations : []}
-    
+
      var storage = new Storage({
        // maximum capacity, default 1000
        size: 1000,
@@ -47,7 +47,7 @@ console.log(props.navigation.state.params.stationConfigurationName);
   }
   static navigationOptions = ({ navigation }) => ({
     title: ` ${navigation.state.params.stationConfigurationName}`,
-   
+    headerTitleStyle: {alignSelf: 'center'},
   });
 
   render(){
@@ -56,19 +56,20 @@ console.log(props.navigation.state.params.stationConfigurationName);
     return(
       <View>
       <Button
-        onPress={() => navigate('StationConfigurationForm')}
+        onPress={() => navigate('StationConfigurationForm',{ ScProfileName : params.stationConfigurationName})}
         title="Add Station"
         />
           <FlatList
             //keyExtractor={item => item.stationName}
             data={this.state.stations}
             renderItem={ ({item}) =>
-                <TouchableOpacity onPress={() => 
+                <TouchableOpacity onPress={() =>
                   navigate('StationConfigurationForm',
-                  {stationData :item , stationConfigurationName : params.stationConfigurationName})}>
+                  {stationData :item , ScProfileName : params.stationConfigurationName})}>
                   <Text style={{padding: 8}}>{item.stationName}</Text>
                 </TouchableOpacity>
             }
+            keyExtractor={(item, index) => index}
           />
       </View>
     )

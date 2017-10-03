@@ -29,6 +29,7 @@ class StationsConfigurationsList extends React.Component{
   }
   static navigationOptions = ({ navigation }) => ({
     title: `Stations Configurations `,
+    headerTitleStyle: {alignSelf: 'center'},
   });
 
   render(){
@@ -47,6 +48,7 @@ class StationsConfigurationsList extends React.Component{
                 <Text style={{fontSize:18, padding: 8}}>{item}</Text>
                   </TouchableOpacity>
           }
+          keyExtractor={(item, index) => index}
           />
       </View>
     )

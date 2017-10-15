@@ -4,8 +4,30 @@ import {StackNavigator} from 'react-navigation';
 import {Card,CardSection,Button,Input,SliderComp,PickerComp} from './components/common';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
+import Realm  from 'realm';
 
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
+// NEED TO MAKE SCHEM AS SEPARATE FILE AND THEN IMPORT IT TO THIS PAGE
 
+class StationType{}
+
+StationType.schema = {
+    name: 'StationType',
+    primaryKey: 'id',
+    properties:{
+        id:    'int',    // primary key
+        typeName : {type: 'string'},
+    }
+}
+
+let realm = new Realm({schema: [StationType]});
+let StationTypes = realm.objects('StationType');
+console.log(StationTypes);
   //
   // var stationConfiguration = {
   //     name: 'Main Profile ',

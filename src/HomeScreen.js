@@ -3,6 +3,37 @@ import {View,Text,Button,FlatList,  TouchableOpacity} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
+import Realm  from 'realm';
+
+
+class StationType{}
+
+StationType.schema = {
+    name: 'StationType',
+    primaryKey: 'id',
+    properties:{
+        id:    'int',    // primary key
+        typeName : {type: 'string'},
+    }
+}
+
+//creating stations types
+Realm.open({schema: [StationType]})
+.then(realm =>{
+			realm.write(() => {
+				realm.create('StationType', {id: 1 , typeName: 'Crew'});
+				realm.create('StationType', {id: 2 , typeName: 'Passengers'});
+				realm.create('StationType', {id: 3 , typeName: 'Baggage'});
+				realm.create('StationType', {id: 4 , typeName: 'Moving'});
+				realm.create('StationType', {id: 5 , typeName: 'Fuel'});
+				realm.create('StationType', {id: 6 , typeName: 'Fluids'});
+				realm.create('StationType', {id: 7 , typeName: 'Other'});
+			});
+		}
+ );
+
+
+
 
 import Reactotron from 'reactotron-react-native'
 

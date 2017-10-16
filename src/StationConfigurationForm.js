@@ -18,7 +18,7 @@ StationType.schema = {
   }
 }
 let realm = new Realm({schema: [StationType]});
-let StationTypes = realm.objects('StationType'); 
+let StationTypes = realm.objects('StationType');
 
 var myJSON = JSON.stringify(StationTypes);
 
@@ -30,9 +30,9 @@ class StationConfigurationForm extends React.Component{
      super(props)
 
      const { params } = this.props.navigation.state;
- 
+
      if(params!=null)
-        this.state = params.stationData;          
+        this.state = params.stationData;
       else
       this.state = {
         stationName:'',
@@ -40,12 +40,12 @@ class StationConfigurationForm extends React.Component{
         maxWeight:'',
         stationWeightUnit:'',
         stationArm:''
-      }         
-          
+      }
+
   }
 
   formSubmit(){
-    
+
 
     //save station to local storage
     var storage = new Storage({
@@ -66,19 +66,19 @@ class StationConfigurationForm extends React.Component{
      key: 'stationsConfiguration',
      id: ScKey
       }).then(ret => {
-         // found data goes to then()       
+         // found data goes to then()
         stationConfiguration = ret;
 
         stationConfiguration.stations.push(this.state);
-       
+
         storage.save({
-          key: 'stationsConfiguration', 
-          id: ScKey,	  
+          key: 'stationsConfiguration',
+          id: ScKey,
           data: stationConfiguration,
           expires: null
       });
 
-      const { navigate } = this.props.navigation;      
+      const { navigate } = this.props.navigation;
       navigate('StationsConfigurationSpecificList',{stationConfigurationName :ScKey});
 
 

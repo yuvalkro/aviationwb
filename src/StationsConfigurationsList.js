@@ -38,7 +38,7 @@ class StationsConfigurationsList extends React.Component{
     return(
       <View>
       <Button
-        onPress={() => navigate('StationConfigurationForm')}
+        onPress={() => navigate('SCAddProfile')}
         title="Add Profile"
         />
           <FlatList

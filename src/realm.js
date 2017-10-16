@@ -19,9 +19,7 @@
 // };
 
 
-class StationsConfiguration{
-
-}
+class StationsConfiguration{}
 
 StationsConfiguration.schema = {
     name:'StationsConfiguration',
@@ -33,9 +31,7 @@ StationsConfiguration.schema = {
     }
 }
 
-class Station{
-
-}
+class Station{}
 
 Station.schema = {
     name: 'Station',

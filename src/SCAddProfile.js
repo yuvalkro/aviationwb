@@ -19,6 +19,43 @@ StationsConfiguration.schema = {
     }
 }
 
+class Station{}
+
+Station.schema = {
+    name: 'Station',
+    primaryKey: 'id',
+    properties:{
+        id:    'int',    // primary key
+        stationName : {type: 'string'},
+        stationType : {type:'list', objectType: 'StationType'},
+        stationWeightUnit : {type:'list', objectType: 'stationWeightUnit'},
+        maxWeight   : {type: 'int'},
+        stationArm  : {type: 'float'},
+    }
+}
+
+class StationType{}
+
+StationType.schema = {
+    name: 'StationType',
+    primaryKey: 'id',
+    properties:{
+        id:    'int',    // primary key
+        typeName : {type: 'string'},
+    }
+}
+
+class stationWeightUnit{}
+
+ stationWeightUnit.schema = {
+     name: 'stationWeightUnit',
+     primaryKey: 'id',
+     properties:{
+         id:    'int',    // primary key
+         weightUnit : {type: 'string'},
+     }
+ }
+
 class StationsConfigurationsList extends React.Component{
 
   constructor(props) {
@@ -32,9 +69,10 @@ class StationsConfigurationsList extends React.Component{
   });
 
   submit(){
-    let realm = new Realm({schema: [StationsConfiguration]});
+    let realm = new Realm({schema: [StationsConfiguration,Station,StationType,stationWeightUnit]});
     realm.write(() => {
-      realm.create('StationsConfiguration', {id: 1, profileName: this.state.profileName, stations: {}});
+      realm.create('StationsConfiguration', {id: 1,profileName: this.state.profileName});
+      this.props.navigation.navigate('StationsConfigurationsList');
     });
   }
 

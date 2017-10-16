@@ -46,9 +46,7 @@ Station.schema = {
     }
 }
 
-class StationType{
-
-}
+class StationType{}
 
 StationType.schema = {
     name: 'StationType',
@@ -59,9 +57,7 @@ StationType.schema = {
     }
 }
 
-class stationWeightUnit{
-
- }
+class stationWeightUnit{}
 
  stationWeightUnit.schema = {
      name: 'stationWeightUnit',

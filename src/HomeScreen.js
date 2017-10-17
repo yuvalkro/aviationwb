@@ -3,35 +3,34 @@ import {View,Text,Button,FlatList,  TouchableOpacity} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
-import Realm  from 'realm';
+import realm from './RealmStationsConfiguration';
 
-
-class StationType{}
-
-StationType.schema = {
-    name: 'StationType',
-    primaryKey: 'id',
-    properties:{
-        id:    'int',    // primary key
-        typeName : {type: 'string'},
-    }
+function guid() {
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
 }
 
-//creating stations types
-Realm.open({schema: [StationType]})
-.then(realm =>{
-			realm.write(() => {
-				realm.create('StationType', {id: 1 , typeName: 'Crew'});
-				realm.create('StationType', {id: 2 , typeName: 'Passengers'});
-				realm.create('StationType', {id: 3 , typeName: 'Baggage'});
-				realm.create('StationType', {id: 4 , typeName: 'Moving'});
-				realm.create('StationType', {id: 5 , typeName: 'Fuel'});
-				realm.create('StationType', {id: 6 , typeName: 'Fluids'});
-				realm.create('StationType', {id: 7 , typeName: 'Other'});
-			});
-		}
- );
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+}
 
+// //creating stations types
+// Realm.open({schema: [StationType]})
+// .then(realm =>{
+// 			realm.write(() => {
+// 				realm.create('StationType', {id: 1 , typeName: 'Crew'});
+// 				realm.create('StationType', {id: 2 , typeName: 'Passengers'});
+// 				realm.create('StationType', {id: 3 , typeName: 'Baggage'});
+// 				realm.create('StationType', {id: 4 , typeName: 'Moving'});
+// 				realm.create('StationType', {id: 5 , typeName: 'Fuel'});
+// 				realm.create('StationType', {id: 6 , typeName: 'Fluids'});
+// 				realm.create('StationType', {id: 7 , typeName: 'Other'});
+// 			});
+// 		}
+//  );
+//
 
 
 

@@ -4,101 +4,49 @@ import {StackNavigator} from 'react-navigation';
 import {Card,CardSection,Button,Input,SliderComp,PickerComp} from './components/common';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
-import Realm  from 'realm';
-
-
-class StationType{}
-
-StationType.schema = {
-  name: 'StationType',
-  primaryKey: 'id',
-  properties:{
-      id:    'int',    // primary key
-      typeName : {type: 'string'},
-  }
-}
-let realm = new Realm({schema: [StationType]});
-let StationTypes = realm.objects('StationType');
-
-var myJSON = JSON.stringify(StationTypes);
-
+import realm from './RealmStationsConfiguration';
 
 class StationConfigurationForm extends React.Component{
+
   static navigationOptions  = {title : 'Station',};
 
   constructor(props) {
      super(props)
-
      const { params } = this.props.navigation.state;
 
-     if(params!=null)
-        this.state = params.stationData;
-      else
-      this.state = {
-        stationName:'',
-        stationType:'',
-        maxWeight:'',
-        stationWeightUnit:'',
-        stationArm:''
-      }
-
+    //  if(params!=null)
+    //     this.state = params.stationData;
+    //   else
+        this.state = {
+          stationName:'',
+          stationType:'',
+          maxWeight:'',
+          stationWeightUnit:'',
+          stationArm:'',
+          txt:''
+        }
   }
+
 
   formSubmit(){
 
+    //get next id
+    let StationsConfigurations = realm.objects('StationsConfiguration');
+    let ScSpecific = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.ScProfileName+'"');
+    this.setState = {txt:JSON.stringify(ScSpecific)}
+    // let id = ScSpecific.max("id") ;
+    // let nextId = id + 1;
 
-    //save station to local storage
-    var storage = new Storage({
-    	// maximum capacity, default 1000
-    	size: 1000,
-    	storageBackend: AsyncStorage,
-    	defaultExpires: null,
-    	enableCache: true
-    })
-
-
-  // load
-
-  var ScKey = this.props.navigation.state.params.stationConfigurationName;
-  ScKey = 'Main Profile';
-
-  storage.load({
-     key: 'stationsConfiguration',
-     id: ScKey
-      }).then(ret => {
-         // found data goes to then()
-        stationConfiguration = ret;
-
-        stationConfiguration.stations.push(this.state);
-
-        storage.save({
-          key: 'stationsConfiguration',
-          id: ScKey,
-          data: stationConfiguration,
-          expires: null
-      });
-
-      const { navigate } = this.props.navigation;
-      navigate('StationsConfigurationSpecificList',{stationConfigurationName :ScKey});
-
-
-      }).catch(err => {
-         console.warn(err.message);
-         switch (err.name) {
-             case 'NotFoundError':
-                 // TODO;
-                 break;
-             case 'ExpiredError':
-                 // TODO
-                 break;
-         }
-      });
+      // realm.write(() => {
+      //     ScSpecific.stations = ScSpecific.stations.push(this.state);
+      //   this.props.navigation.navigate(navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.ScProfileName}));
+      // });
   }
 
   render(){
     return(
       <View style={{padding:2}}>
-        <Text>{myJSON}</Text>
+      <Text>{this.state.txt}</Text>
       <Card>
         <CardSection>
           <Input

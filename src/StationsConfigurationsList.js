@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,Text,FlatList,Button,TouchableOpacity} from 'react-native';
+import {View,Text,FlatList,Button,TouchableOpacity,ScrollView } from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
@@ -38,7 +38,8 @@ class StationsConfigurationsList extends React.Component{
   componentWillMount(){
     let StationsConfigurations = realm.objects('StationsConfiguration');
     //json => array
-    var arr = Object.keys(StationsConfigurations).map(function(k) { return StationsConfigurations[k] });
+  //  var arr = Object.keys(StationsConfigurations).map(function(k) { return StationsConfigurations[k] });
+    var arr = Object.values(StationsConfigurations);
     this.setState({stationsConfigurations : arr});
   }
 
@@ -56,15 +57,17 @@ class StationsConfigurationsList extends React.Component{
         onPress={() => navigate('SCAddProfile')}
         title="Add Profile"
         />
+        <ScrollView>
           <FlatList
             data={this.state.stationsConfigurations}
             renderItem={ ({item}) =>
-              <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{profileName :item.profileName})}>
+              <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{profileName :item.profileName,stations: item.stations})}>
               <Text style={{fontSize:18, padding: 8}}>{item.profileName}</Text>
               </TouchableOpacity>
           }
           keyExtractor={(item, index) => item.id}
           />
+        </ScrollView>
       </View>
     )
   }

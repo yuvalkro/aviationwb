@@ -14,11 +14,11 @@ class StationsConfigurationsList extends React.Component{
 
   //loading exsiting profile stations
     componentWillMount(){
-      let StationsConfigurations = realm.objects('StationsConfiguration');
-      let stations = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.profileName+'"');
-      //json => array
-      var arr = Object.keys(stations).map(function(k) { return stations[k] });
-      this.setState({stations : arr});
+      // let StationsConfigurations = realm.objects('StationsConfiguration');
+      // let stations = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.profileName+'"');
+      // //json => array
+      // var arr = Object.keys(stations).map(function(k) { return stations[k] });
+      this.setState({stations : this.props.navigation.state.stations});
     }
 
 
@@ -34,7 +34,7 @@ class StationsConfigurationsList extends React.Component{
       <View>
       <Text>{this.state.stations}</Text>
       <Button
-        onPress={() => navigate('StationConfigurationForm',{ ScProfileName : params.profileName})}
+        onPress={() => navigate('StationConfigurationForm',{ ScProfileName : params.profileName,stations:params.stations})}
         title="Add Station"
         />
           <FlatList

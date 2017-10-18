@@ -32,13 +32,14 @@ class StationConfigurationForm extends React.Component{
 
     //get next id
     let StationsConfigurations = realm.objects('StationsConfiguration');
-    let ScSpecific = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.ScProfileName+'"');
-    this.setState = {txt:JSON.stringify(ScSpecific)}
+    let ScSpecificProfile = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.ScProfileName+'"');
+    //this.setState ({txt:JSON.stringify(ScSpecificProfile)});
     // let id = ScSpecific.max("id") ;
     // let nextId = id + 1;
-
+   let ScSpecificProfileStations = ScSpecificProfile.stations;
+   this.setState ({txt:JSON.stringify(ScSpecificProfile)});
       // realm.write(() => {
-      //     ScSpecific.stations = ScSpecific.stations.push(this.state);
+      //   ScSpecificProfileStations.push(this.state);
       //   this.props.navigation.navigate(navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.ScProfileName}));
       // });
   }
@@ -46,7 +47,7 @@ class StationConfigurationForm extends React.Component{
   render(){
     return(
       <View style={{padding:2}}>
-      <Text>{this.state.txt}</Text>
+      <Text>X{this.state.txt}X</Text>
       <Card>
         <CardSection>
           <Input

@@ -23,31 +23,52 @@ class StationConfigurationForm extends React.Component{
           maxWeight:'',
           stationWeightUnit:'',
           stationArm:'',
-          txt:''
+          stationTypes: [],
+          stationWeightUnits:[]
         }
   }
+
+ componentWillMount(){
+    //loading station types
+   let stationTypes = realm.objects('StationType');
+   this.setState({stationTypes :  Object.values(stationTypes).map((element)=>element.typeName)});
+
+   //loading station weights units
+   let stationWeightUnits = realm.objects('StationWeightUnit');
+   this.setState({stationWeightUnits :  Object.values(stationWeightUnits).map((element)=>element.stationWeightUnit)});
+
+ }
 
 
   formSubmit(){
 
-    //get next id
-    let StationsConfigurations = realm.objects('StationsConfiguration');
-    let ScSpecificProfile = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.ScProfileName+'"');
-    //this.setState ({txt:JSON.stringify(ScSpecificProfile)});
-    // let id = ScSpecific.max("id") ;
-    // let nextId = id + 1;
-   let ScSpecificProfileStations = ScSpecificProfile.stations;
-   this.setState ({txt:JSON.stringify(ScSpecificProfile)});
-      // realm.write(() => {
-      //   ScSpecificProfileStations.push(this.state);
-      //   this.props.navigation.navigate(navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.ScProfileName}));
-      // });
+   let ScSpecificProfileStations = this.props.navigation.state.params.stations
+
+   let nextId =  1;
+
+   if(ScSpecificProfileStations!={})
+   {
+     let id = ScSpecificProfileStations.max("id") ;
+     nextId = id + 1;
+   }
+
+   let newStation = {
+     id:1,
+     stationName:this.state.stationName,
+     stationType:'Crew',
+     maxWeight:this.state.maxWeight,
+     stationWeightUnit:'Kilogram',
+     stationArm:this.state.stationArm,
+   }
+      realm.write(() => {
+        ScSpecificProfileStations.push(newStation);
+        this.props.navigation.navigate(navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName}));
+      });
   }
 
   render(){
     return(
       <View style={{padding:2}}>
-      <Text>X{this.state.txt}X</Text>
       <Card>
         <CardSection>
           <Input
@@ -60,7 +81,7 @@ class StationConfigurationForm extends React.Component{
         <CardSection>
           <PickerComp
           label="Station Type"
-          itemsData={[ 'Crew', 'Passengers', 'Baggage' ,'Fluids' ,'Other' ,'Moving','Fuel']}
+          itemsData = {this.state.stationTypes}
           onChangeText={(text) => this.setState({stationType: text})}
           value={this.state.stationType}
           />
@@ -68,7 +89,7 @@ class StationConfigurationForm extends React.Component{
         <CardSection>
           <PickerComp
           label="Station Unit"
-          itemsData={[ 'US pound', 'Kilogram']}
+          itemsData={this.state.stationWeightUnits}
           onChangeText={(text) => this.setState({stationWeightUnit: text})}
           value={this.state.stationWeightUnit}
           />

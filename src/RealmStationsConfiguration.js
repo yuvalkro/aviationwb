@@ -40,10 +40,8 @@ Station.schema = {
     properties:{
         id:    'int',    // primary key
         stationName : {type: 'string'},
-        stationType : {type:'list', objectType: 'StationType'},
-        stationWeightUnit : {type:'list', objectType: 'stationWeightUnit'},
-        // stationType :{type: 'string'},
-        // stationWeightUnit : {type: 'string'},
+        stationType : {type:'StationType'},
+        stationWeightUnit : {type:'StationWeightUnit'},
         maxWeight   : {type: 'int'},
         stationArm  : {type: 'float'},
     }
@@ -63,7 +61,7 @@ StationType.schema = {
 class StationWeightUnit{}
 
  StationWeightUnit.schema = {
-     name: 'stationWeightUnit',
+     name: 'StationWeightUnit',
      primaryKey: 'id',
      properties:{
          id:    'int',    // primary key

@@ -29,13 +29,14 @@ class StationConfigurationForm extends React.Component{
   }
 
  componentWillMount(){
+
     //loading station types
    let stationTypes = realm.objects('StationType');
    this.setState({stationTypes :  Object.values(stationTypes).map((element)=>element.typeName)});
 
    //loading station weights units
    let stationWeightUnits = realm.objects('StationWeightUnit');
-   this.setState({stationWeightUnits :  Object.values(stationWeightUnits).map((element)=>element.stationWeightUnit)});
+   this.setState({stationWeightUnits : Object.values(stationWeightUnits).map((element)=>element.weightUnit)});
 
  }
 
@@ -44,25 +45,27 @@ class StationConfigurationForm extends React.Component{
 
    let ScSpecificProfileStations = this.props.navigation.state.params.stations
 
-   let nextId =  1;
-
-   if(ScSpecificProfileStations!={})
-   {
-     let id = ScSpecificProfileStations.max("id") ;
-     nextId = id + 1;
-   }
-
+  //  let nextId =  1;
+   //
+  //  if(ScSpecificProfileStations!={})
+  //  {
+  //    let id = ScSpecificProfileStations.max("id") ;
+  //    nextId = id + 1;
+  //  }
+ // stationType:{id: 2 , typeName: 'Passengers'},
+ // stationWeightUnit: {id: 1 , weightUnit: 'Kilogram'},
+ // maxWeight:this.state.maxWeight,
+ // stationArm:this.state.stationArm,
+ //
    let newStation = {
-     id:1,
+     id:2,
      stationName:this.state.stationName,
-     stationType:'Crew',
-     maxWeight:this.state.maxWeight,
-     stationWeightUnit:'Kilogram',
-     stationArm:this.state.stationArm,
+     maxWeight:67,
+     stationArm:43,
    }
       realm.write(() => {
         ScSpecificProfileStations.push(newStation);
-        this.props.navigation.navigate(navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName}));
+        this.props.navigation.navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName});
       });
   }
 

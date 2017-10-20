@@ -23,15 +23,14 @@ class StationsConfigurationsList extends React.Component{
 
     let StationsConfigurations = realm.objects('StationsConfiguration');
 
-    // if(!(Object.keys(StationsConfigurations).length === 0 && StationsConfigurations.constructor === Object))
-    // {
     let nextId = 1;
-    let id = StationsConfigurations.max("id") ;
-    nextId = id + 1;
-    // }
+    if(StationsConfigurations.length>0){
+      let id = StationsConfigurations.max("id") ;
+      nextId = id + 1;
+    }
 
       realm.write(() => {
-        realm.create('StationsConfiguration', {id: 1,profileName: this.state.profileName});
+        realm.create('StationsConfiguration', {id: nextId,profileName: this.state.profileName});
         this.props.navigation.navigate('StationsConfigurationsList');
       });
     }

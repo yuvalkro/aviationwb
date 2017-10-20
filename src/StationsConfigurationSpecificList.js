@@ -14,11 +14,9 @@ class StationsConfigurationsList extends React.Component{
 
   //loading exsiting profile stations
     componentWillMount(){
-      // let StationsConfigurations = realm.objects('StationsConfiguration');
-      // let stations = StationsConfigurations.filtered('profileName = "'+this.props.navigation.state.profileName+'"');
-      // //json => array
-      // var arr = Object.keys(stations).map(function(k) { return stations[k] });
-      this.setState({stations : this.props.navigation.state.stations});
+      //json => array
+      var stationsArr = Object.values(this.props.navigation.state.params.stations);
+      this.setState({stations : stationsArr});
     }
 
 
@@ -32,9 +30,8 @@ class StationsConfigurationsList extends React.Component{
      const { navigate } = this.props.navigation;
     return(
       <View>
-      <Text>{this.state.stations}</Text>
       <Button
-        onPress={() => navigate('StationConfigurationForm',{ ScProfileName : params.profileName,stations:params.stations})}
+        onPress={() => navigate('SCStationForm',{ScProfileName : params.profileName,stations:params.stations})}
         title="Add Station"
         />
           <FlatList
@@ -42,7 +39,7 @@ class StationsConfigurationsList extends React.Component{
             data={this.state.stations}
             renderItem={ ({item}) =>
                 <TouchableOpacity onPress={() =>
-                  navigate('StationConfigurationForm',
+                  navigate('SCStationForm',
                   {stationData :item , ScProfileName : params.profileName})}>
                   <Text style={{padding: 8}}>{item.stationName}</Text>
                 </TouchableOpacity>

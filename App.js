@@ -5,18 +5,18 @@ import HomeScreen from './src/HomeScreen';
 import BuildAircraft from './src/BuildAircraft';
 import TailNumbersList from './src/TailNumbersList';
 import StationsConfigurationsList from './src/StationsConfigurationsList';
-import StationConfigurationForm from './src/StationConfigurationForm';
+import SCStationForm from './src/SCStationForm';
 import StationsConfigurationSpecificList from './src/StationsConfigurationSpecificList';
-import SCAddProfile from './src/SCAddProfile';
+import SCProfileForm from './src/SCProfileForm';
 
 export default aviationwb = StackNavigator({
   Home: {screen:HomeScreen},
   BuildAircraft : {screen:BuildAircraft},
   TailNumbers : {screen:TailNumbersList},
   StationsConfigurationsList : {screen: StationsConfigurationsList},
-  StationConfigurationForm : {screen: StationConfigurationForm},
+  SCStationForm : {screen: SCStationForm},
   StationsConfigurationSpecificList : {screen: StationsConfigurationSpecificList},
-  SCAddProfile : {screen: SCAddProfile},
+  SCProfileForm : {screen: SCProfileForm},
 });
 
 AppRegistry.registerComponent('aviationwb',() => aviationwb);

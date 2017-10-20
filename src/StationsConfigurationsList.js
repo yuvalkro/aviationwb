@@ -45,8 +45,18 @@ class StationsConfigurationsList extends React.Component{
 
   static navigationOptions = ({ navigation }) => ({
     title: `Stations Configurations `,
-    headerTitleStyle: {alignSelf: 'center'},
+    headerTitleStyle: {alignSelf: 'center'}
   });
+
+  deleteSCProfile(SCProfileId){
+    let a = realm.objects('StationsConfiguration');
+    let x = a.filtered('id =' + SCProfileId);
+    realm.write(() => {
+      realm.delete(x);
+    });
+    this.props.navigation.navigate('StationsConfigurationsList');
+  }
+
 
   render(){
      const { params } = this.props.navigation.state;
@@ -54,16 +64,26 @@ class StationsConfigurationsList extends React.Component{
     return(
       <View>
       <Button
-        onPress={() => navigate('SCAddProfile')}
+        onPress={() => navigate('SCProfileForm')}
         title="Add Profile"
         />
         <ScrollView>
           <FlatList
             data={this.state.stationsConfigurations}
             renderItem={ ({item}) =>
-              <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{profileName :item.profileName,stations: item.stations})}>
-              <Text style={{fontSize:18, padding: 8}}>{item.profileName}</Text>
-              </TouchableOpacity>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{profileName :item.profileName,stations: item.stations})}>
+                  <Text style={{fontSize:18, padding: 8}}>{item.profileName}</Text>
+                </TouchableOpacity>
+                </View>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                <TouchableOpacity onPress={this.deleteSCProfile.bind(this,item.id)} >
+                  <Text style={{fontSize:18, padding: 8}}>                         (DEL)</Text>
+                </TouchableOpacity>
+                </View>
+              </View>
+
           }
           keyExtractor={(item, index) => item.id}
           />

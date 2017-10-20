@@ -6,17 +6,18 @@ import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
 import realm from './RealmStationsConfiguration';
 
-class StationConfigurationForm extends React.Component{
+class SCStationForm extends React.Component{
 
   static navigationOptions  = {title : 'Station',};
 
   constructor(props) {
      super(props)
+
      const { params } = this.props.navigation.state;
 
-    //  if(params!=null)
-    //     this.state = params.stationData;
-    //   else
+     if(params!=null)
+        this.state = params.stationData;
+      else
         this.state = {
           stationName:'',
           stationType:'',
@@ -45,27 +46,30 @@ class StationConfigurationForm extends React.Component{
 
    let ScSpecificProfileStations = this.props.navigation.state.params.stations
 
-  //  let nextId =  1;
-   //
-  //  if(ScSpecificProfileStations!={})
-  //  {
-  //    let id = ScSpecificProfileStations.max("id") ;
-  //    nextId = id + 1;
-  //  }
+
  // stationType:{id: 2 , typeName: 'Passengers'},
  // stationWeightUnit: {id: 1 , weightUnit: 'Kilogram'},
  // maxWeight:this.state.maxWeight,
  // stationArm:this.state.stationArm,
- //
+
+
+ let station = realm.objects('Station');
+
+ let nextId = 1;
+  if(station.length>0){
+ let id = station.max("id") ;
+ nextId = id + 1;
+ }
+
    let newStation = {
-     id:2,
+     id:nextId,
      stationName:this.state.stationName,
      maxWeight:67,
      stationArm:43,
    }
       realm.write(() => {
         ScSpecificProfileStations.push(newStation);
-        this.props.navigation.navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName});
+        this.props.navigation.navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName,stations:ScSpecificProfileStations});
       });
   }
 
@@ -123,4 +127,4 @@ class StationConfigurationForm extends React.Component{
   }
 }
 
-export default StationConfigurationForm;
+export default SCStationForm;

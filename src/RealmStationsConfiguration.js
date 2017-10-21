@@ -17,7 +17,6 @@
 //     }
 //   ]
 // };
-
 import Realm  from 'realm';
 
 class StationsConfiguration{}

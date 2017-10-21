@@ -155,9 +155,12 @@ class HomeScreen extends React.Component{
               //data={[{key:'Cessna 120'},{key:'Cessna 150a'},{key:'Cessna 172P'},{key:'Cessna 180'}]}
               data={this.state.airplanesModels}
               renderItem={ ({item}) =>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',}}>
                 <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.key,tailNumbers:item.tailNumbers})}>
                   <Text style={{fontSize:18, padding: 8}}>{item.key}</Text>
                 </TouchableOpacity>
+                <Button title="actions"/>
+                </View>
               }
 							keyExtractor={(item, index) => index}
             />

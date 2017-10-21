@@ -71,17 +71,13 @@ class StationsConfigurationsList extends React.Component{
           <FlatList
             data={this.state.stationsConfigurations}
             renderItem={ ({item}) =>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',}}>
                 <TouchableOpacity onPress={() => navigate('StationsConfigurationSpecificList',{profileName :item.profileName,stations: item.stations})}>
                   <Text style={{fontSize:18, padding: 8}}>{item.profileName}</Text>
                 </TouchableOpacity>
-                </View>
-                <View style={{flex: 1, flexDirection: 'row'}}>
                 <TouchableOpacity onPress={this.deleteSCProfile.bind(this,item.id)} >
-                  <Text style={{fontSize:18, padding: 8}}>                         (DEL)</Text>
+                  <Text style={{fontSize:18, padding: 8}}>(DEL)</Text>
                 </TouchableOpacity>
-                </View>
               </View>
 
           }

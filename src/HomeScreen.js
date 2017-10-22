@@ -1,5 +1,6 @@
 import React from 'react';
-import {View,Text,Button,FlatList,  TouchableOpacity} from 'react-native';
+import {TouchableHighlight,Modal,View,Text,FlatList, Button, TouchableOpacity} from 'react-native';
+//import {Button} from './components/common';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
@@ -88,13 +89,17 @@ class HomeScreen extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {airplanesModels: []};
+    this.state = {airplanesModels: [],  modalVisible: false,};
   }
+
   static navigationOptions  = {
 		title : 'Aviation W&B Calculator',
  		headerTitleStyle: {alignSelf: 'center'},
-};
+	};
 
+	setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
   componentWillMount(){
 
     // load
@@ -143,6 +148,43 @@ class HomeScreen extends React.Component{
     const { navigate } = this.props.navigation;
     return(
       <View>
+			<Modal
+				 animationType="fade"
+				 transparent={true}
+				 visible={this.state.modalVisible}
+				 onRequestClose={() => {alert("Modal has been closed.")}}
+				 >
+				<View style={{backgroundColor: '#00000080',flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'}}>
+				 <View style={{backgroundColor: '#fff', padding: 20,
+ 					 width: 300,
+ 					 height: 300}} >
+
+					 <Button
+						 onPress={() => navigate('BuildAircraft')}
+						 title="Add Tail Number"
+						 />
+						 <Button
+							onPress={() => navigate('BuildAircraft')}
+							title="Setup"
+							/>
+							<Button
+								onPress={() => navigate('BuildAircraft')}
+								title="Delete"
+								/>
+								<View style={{alignItems: 'center'}}>
+								<TouchableHighlight onPress={() => {
+		 						 this.setModalVisible(!this.state.modalVisible)
+		 					 }}>
+		 						 <Text>Close</Text>
+		 					 </TouchableHighlight>
+							 </View>
+				 </View>
+				</View>
+			 </Modal>
+
           <Button
             onPress={() => navigate('BuildAircraft')}
             title="Build Your Airplane"
@@ -159,7 +201,9 @@ class HomeScreen extends React.Component{
                 <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.key,tailNumbers:item.tailNumbers})}>
                   <Text style={{fontSize:18, padding: 8}}>{item.key}</Text>
                 </TouchableOpacity>
-                <Button title="actions"/>
+                <Button title="actions" onPress={() => {
+				 				 this.setModalVisible(true)
+				 			 }}/>
                 </View>
               }
 							keyExtractor={(item, index) => index}

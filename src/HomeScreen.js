@@ -1,22 +1,10 @@
 import React from 'react';
-import {TouchableHighlight,Modal,View,Text,FlatList, Button, TouchableOpacity} from 'react-native';
-//import {Button} from './components/common';
+import {TouchableHighlight,Modal,View,Text,FlatList, TouchableOpacity} from 'react-native';
+import {Button} from './components/common';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
 import { AsyncStorage } from 'react-native';
 import realm from './RealmStationsConfiguration';
-
-function guid() {
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
-}
-
-function s4() {
-  return Math.floor((1 + Math.random()) * 0x10000)
-    .toString(16)
-    .substring(1);
-}
-
 
 
 			// realm.write(() => {
@@ -76,6 +64,8 @@ storage.save({
               {key:'Cessna 150a',tailNumbers :[{key:'P1234'},{key:'N9234'},{key:'N1217'}]},
               {key:'Cessna 172P',tailNumbers :[{key:'A1234'},{key:'N9234'}]},
               {key:'Cessna 180',tailNumbers :[{key:'Z1234'}]},
+                {key:'Cessna 2180',tailNumbers :[{key:'Z1234'}]},
+                  {key:'Cessna 4180',tailNumbers :[{key:'Z1234'}]},
             ]
 	},
 
@@ -89,7 +79,11 @@ class HomeScreen extends React.Component{
 
   constructor(props){
     super(props);
-    this.state = {airplanesModels: [],  modalVisible: false,};
+    this.state = {
+      airplanesModels: [],
+      modalVisible: false,
+      modalTitle : ''
+    };
   }
 
   static navigationOptions  = {
@@ -97,8 +91,8 @@ class HomeScreen extends React.Component{
  		headerTitleStyle: {alignSelf: 'center'},
 	};
 
-	setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+	setModalVisible(visible,modalTitle) {
+    this.setState({modalVisible: visible, modalTitle});
   }
   componentWillMount(){
 
@@ -147,7 +141,7 @@ class HomeScreen extends React.Component{
 		Reactotron.log('hello rendering world');
     const { navigate } = this.props.navigation;
     return(
-      <View>
+      <View style={{flex:1,  justifyContent: 'flex-start'}}>
 			<Modal
 				 animationType="fade"
 				 transparent={true}
@@ -158,62 +152,84 @@ class HomeScreen extends React.Component{
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center'}}>
-				 <View style={{backgroundColor: '#fff', padding: 20,
- 					 width: 300,
- 					 height: 300}} >
+				 <View style={{
+            justifyContent: 'space-between',
+            backgroundColor: '#fff',
+            padding: 10,
+ 					  width: 280,
+ 					  height: 320,
+            alignItems: 'center'
+         }} >
+           <Text style={styles.textStyle}>{this.state.modalTitle}</Text>
+           <Button onPress={() => navigate('BuildAircraft')}>
+             <Text>General Info</Text>
+           </Button>
 
-					 <Button
-						 onPress={() => navigate('BuildAircraft')}
-						 title="Add Tail Number"
-						 />
-						 <Button
-							onPress={() => navigate('BuildAircraft')}
-							title="Setup"
-							/>
-							<Button
-								onPress={() => navigate('BuildAircraft')}
-								title="Delete"
-								/>
-								<View style={{alignItems: 'center'}}>
-								<TouchableHighlight onPress={() => {
-		 						 this.setModalVisible(!this.state.modalVisible)
-		 					 }}>
-		 						 <Text>Close</Text>
-		 					 </TouchableHighlight>
-							 </View>
+           <Button onPress={() => navigate('StationsConfigurationsList')}>
+             <Text>Envelope Profiles</Text>
+           </Button>
+
+           <Button onPress={() => navigate('StationsConfigurationsList')}>
+             <Text>Stations Configurations</Text>
+           </Button>
+          <Button onPress={() => navigate('BuildAircraft')}>
+            <Text>Add Tail Number</Text>
+          </Button>
+          <Button onPress={() => {
+              this.setModalVisible(!this.state.modalVisible,'');
+              navigate('AirplaneSetupScreen',{AirplaneModel:this.state.modalTitle});
+            }}>
+            <Text>Setup</Text>
+          </Button>
+          <Button onPress={() => navigate('BuildAircraft')}>
+            <Text>Delete</Text>
+          </Button>
+            <TouchableHighlight onPress={() => {
+              this.setModalVisible(!this.state.modalVisible,'')
+              }}>
+              <Text>[ Close ]</Text>
+            </TouchableHighlight>
+
 				 </View>
 				</View>
 			 </Modal>
 
-          <Button
-            onPress={() => navigate('BuildAircraft')}
-            title="Build Your Airplane"
-            />
-          <Button
-            onPress={() => navigate('StationsConfigurationsList',{airplaneModel :'XXXXX'})}
-            title="Stations Configurations"
-            />
-            <FlatList
-              //data={[{key:'Cessna 120'},{key:'Cessna 150a'},{key:'Cessna 172P'},{key:'Cessna 180'}]}
-              data={this.state.airplanesModels}
-              renderItem={ ({item}) =>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',}}>
+          <Button onPress={() => navigate('BuildAircraft')}>
+            <Text>Build Your Airplane</Text>
+          </Button>
+
+          <FlatList
+            //data={[{key:'Cessna 120'},{key:'Cessna 150a'},{key:'Cessna 172P'},{key:'Cessna 180'}]}
+            ItemSeparatorComponent={ () => <View style={ { height: 1 } } /> }
+            data={this.state.airplanesModels}
+            renderItem={ ({item}) =>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',backgroundColor:'#616160',padding:10,paddingRight: 2}}>
                 <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.key,tailNumbers:item.tailNumbers})}>
-                  <Text style={{fontSize:18, padding: 8}}>{item.key}</Text>
+                  <Text style={{fontSize:16,  fontWeight:'500', color :'#fff'}}>{item.key}</Text>
                 </TouchableOpacity>
-                <Button title="actions" onPress={() => {
-				 				 this.setModalVisible(true)
-				 			 }}/>
-                </View>
-              }
-							keyExtractor={(item, index) => index}
-            />
+                <Button onPress={() => {this.setModalVisible(true,item.key)}}>
+                  <Text>Actions</Text>
+               </Button>
+              </View>
+            }
+						keyExtractor={(item, index) => index}
+          />
       </View>
     )
   }
+}
 
-
-
+const styles = {
+  textStyle:{
+    alignSelf :'center',
+    color :'#000',
+    fontSize :16,
+    fontWeight:'600',
+    paddingTop:10,
+    paddingBottom:10,
+    paddingRight:14,
+    paddingLeft:14
+  },
 }
 
 export default HomeScreen;

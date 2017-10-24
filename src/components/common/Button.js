@@ -17,19 +17,20 @@ const Button =(props) =>{
 const styles = {
   textStyle:{
     alignSelf :'center',
-    color :'#007aff',
-    fontSize :16,
+    color :'#fff',
+    fontSize :14,
     fontWeight:'600',
-    paddingTop:10,
-    paddingBottom:10
+    paddingTop:8,
+    paddingBottom:8,
+    paddingRight:14,
+    paddingLeft:14
   },
   buttonStyle:{
-    flex:1,
     alignSelf:'stretch',
-    backgroundColor: '#fff',
-    borderRadius:10,
+    backgroundColor: '#37A0EC',
+    borderRadius:6,
     borderWidth:1,
-    borderColor:'#007aff',
+    borderColor:'#fff',
     marginLeft:5,
     marginRight:5
   }

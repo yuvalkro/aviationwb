@@ -8,6 +8,8 @@ import StationsConfigurationsList from './src/StationsConfigurationsList';
 import SCStationForm from './src/SCStationForm';
 import StationsConfigurationSpecificList from './src/StationsConfigurationSpecificList';
 import SCProfileForm from './src/SCProfileForm';
+import AirplaneSetupScreen from './src/AirplaneSetupScreen';
+
 
 export default aviationwb = StackNavigator({
   Home: {screen:HomeScreen},
@@ -17,6 +19,7 @@ export default aviationwb = StackNavigator({
   SCStationForm : {screen: SCStationForm},
   StationsConfigurationSpecificList : {screen: StationsConfigurationSpecificList},
   SCProfileForm : {screen: SCProfileForm},
+  AirplaneSetupScreen : {screen:AirplaneSetupScreen}
 });
 
 AppRegistry.registerComponent('aviationwb',() => aviationwb);

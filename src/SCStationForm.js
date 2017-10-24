@@ -38,39 +38,38 @@ class SCStationForm extends React.Component{
    //loading station weights units
    let stationWeightUnits = realm.objects('StationWeightUnit');
    this.setState({stationWeightUnits : Object.values(stationWeightUnits).map((element)=>element.weightUnit)});
-
  }
 
 
   formSubmit(){
 
-    let ScSpecificProfileStations = this.props.navigation.state.params.stations
+   let ScSpecificProfileStations = this.props.navigation.state.params.stations
 
 
-    // stationType:{id: 2 , typeName: 'Passengers'},
-    // stationWeightUnit: {id: 1 , weightUnit: 'Kilogram'},
-    // maxWeight:this.state.maxWeight,
-    // stationArm:this.state.stationArm,
+ // stationType:{id: 2 , typeName: 'Passengers'},
+ // stationWeightUnit: {id: 1 , weightUnit: 'Kilogram'},
+ // maxWeight:this.state.maxWeight,
+ // stationArm:this.state.stationArm,
 
 
-    let station = realm.objects('Station');
+  let station = realm.objects('Station');
 
-    let nextId = 1;
-    if(station.length>0){
+  let nextId = 1;
+  if(station.length>0){
     let id = station.max("id") ;
     nextId = id + 1;
-    }
+  }
 
-    let newStation = {
+   let newStation = {
      id:nextId,
      stationName:this.state.stationName,
      maxWeight:67,
      stationArm:43,
-    }
-    realm.write(() => {
+   }
+      realm.write(() => {
         ScSpecificProfileStations.push(newStation);
         this.props.navigation.navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName,stations:ScSpecificProfileStations});
-    });
+      });
   }
 
   render(){
@@ -105,14 +104,14 @@ class SCStationForm extends React.Component{
           <Input
             label="Max Weight"
             onChangeText={(text) => this.setState({maxWeight: text})}
-            value={this.state.maxWeight+''}
+            value={this.state.maxWeight}
           />
         </CardSection>
         <CardSection>
           <Input
             label="Station Arm (in)"
             onChangeText={(text) => this.setState({stationArm: text})}
-            value={this.state.stationArm+''}
+            value={this.state.stationArm}
           />
         </CardSection>
         <CardSection>

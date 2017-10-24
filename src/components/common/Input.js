@@ -2,53 +2,67 @@ import React from 'react';
 import {TextInput,View,Text} from 'react-native';
 
 const Input = ({label,value,onChangeText,placeholder,secureTextEntry,description}) =>{
-const {inputStyle,labelStyle,descriptionStyle,containerStyle} = styles;
+const {labelStyle,descriptionStyle,containerStyle} = styles;
   return(
     <View style={containerStyle}>
-      <View>
-      <Text   numberOfLines={1} style={labelStyle}>{label}</Text>
-      <Text style={descriptionStyle}> {description}</Text>
+      <View style={{flex: 1,flexDirection:'row',justifyContent:'flex-start'}}>
+        <Text numberOfLines={1} style={labelStyle}>{label}</Text>
+        <Text style={descriptionStyle}>{description}</Text>
       </View>
-      <TextInput
-        placeholder = {placeholder}
-        autoCorrect= {false}
-        secureTextEntry ={secureTextEntry}
-        style={inputStyle}
-        value={value}
-        onChangeText={onChangeText}
-      />
+      <View style={styles.MainContainer}>
+        <TextInput
+          autoCorrect= {false}
+          secureTextEntry ={secureTextEntry}
+          // Adding hint in Text Input using Place holder.
+          placeholder={placeholder}
+
+          // Making the Under line Transparent.
+          underlineColorAndroid='transparent'
+
+          // Calling the custom TextInputStyleClass.
+          style={styles.TextInputStyleClass}
+          value={value}
+          onChangeText={onChangeText}
+          />
+        </View>
     </View>
   )
-
 }
 
 const styles = {
-  inputStyle : {
-    color:'#000',
-    paddingRight :5,
-    paddingLeft: 5,
-    fontSize:18,
-    lineHeight:23,
-    flex:1,
-    height:50,
-    width:200
+  MainContainer :{
+    flexDirection:'row',
+  // Setting up View inside content in Vertically center.
+  justifyContent: 'center',
+  flex:1,
+  margin: 10
   },
+
+TextInputStyleClass:{
+  flex:1,
+  textAlign: 'left',
+  height: 50,
+  borderWidth: 2,
+  borderColor: '#EAEAEB',
+  borderRadius: 5 ,
+  backgroundColor : "#FFFFFF",
+  fontSize:18,
+
+},
   labelStyle : {
-    fontSize:18,
+    fontSize:16,
     fontWeight:'bold',
-    paddingLeft:20,
+    paddingLeft:5,
     flex:1
   },
   descriptionStyle : {
     fontSize:12,
-    paddingLeft:20,
-    flex:1
+    paddingLeft:5
   },
   containerStyle : {
-    height:50,
     flex:1,
-    flexDirection:'row',
-    alignItems:'center'
+    flexDirection:'column',
+    alignItems:'flex-start'
   }
 };
 

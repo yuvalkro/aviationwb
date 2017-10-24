@@ -45,13 +45,13 @@ const styles = {
   labelStyle : {
     fontSize:18,
     fontWeight:'bold',
-    paddingLeft:20,
+    paddingLeft:5,
     flex:1
   },
   containerStyle : {
     height:70,
     flex:1,
-    flexDirection:'row',
+    flexDirection:'column',
     alignItems:'stretch'
   }
 };

@@ -1,5 +1,33 @@
 import Realm  from 'realm';
 
+class Envelope{}
+
+Envelope.schema = {
+    name:'Envelope',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        profileName : {type: 'string'},
+        MaxRampWeight: {type: 'string'},
+        weightUnit: {type: 'string'},
+        armUnit: {type: 'string'},
+        xAxisUseMoment : {type: 'string'},
+        envelopeLayers : {type:'list', objectType: 'EnvelopeLayer'},
+    }
+}
+
+class EnvelopeLayer{}
+
+EnvelopeLayer.schema = {
+    name:'EnvelopeLayer',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        layerName : {type: 'string'},
+
+    }
+}
+
 class Airplane{}
 
 Airplane.schema = {

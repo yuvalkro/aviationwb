@@ -1,3 +1,34 @@
+import Realm  from 'realm';
+
+class Airplane{}
+
+Airplane.schema = {
+    name:'Airplane',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        Maker: {type: 'string'},
+        Model: {type: 'string'},
+        tailNumbers:    {type:'list', objectType: 'TailNumber'},
+    }
+}
+
+class TailNumber{}
+
+TailNumber.schema = {
+    name:'TailNumber',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        tailNumber: {type: 'string'},
+        remark: {type: 'string'},
+        emptyWeight: {type: 'string'},
+        emptyWweightArm: {type: 'string'},
+        emptyWweightMoment: {type: 'string'},
+        scProfile: {type: 'string'},
+        envelopeProfile: {type: 'string'},
+    }
+}
 // var stationConfiguration = {
 //     name: 'Main Profile ',
 //     stations: [
@@ -17,8 +48,6 @@
 //     }
 //   ]
 // };
-import Realm  from 'realm';
-
 class StationsConfiguration{}
 
 StationsConfiguration.schema = {

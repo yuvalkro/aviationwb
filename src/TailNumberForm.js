@@ -16,11 +16,11 @@ class SCStationForm extends React.Component{
   constructor(props) {
      super(props)
 
-     const { params } = this.props.navigation.state;
-
-     if(params!=null)
-        this.state = params.stationData;
-      else
+    //  const { params } = this.props.navigation.state;
+     //
+    //  if(params!=null)
+    //     this.state = params.stationData;
+    //   else
         this.state = {
           stationsConfigurations:[]
         }
@@ -33,7 +33,8 @@ class SCStationForm extends React.Component{
     componentWillMount(){
       //loading exsiting profiles
       let StationsConfigurations = realm.objects('StationsConfiguration');
-      this.setState({StationsConfigurations :  Object.values(StationsConfigurations).map((element)=>element.profileName)});
+      this.setState({stationsConfigurations :  Object.values(StationsConfigurations).map((element)=>element.profileName)});
+
     }
 
 
@@ -106,20 +107,22 @@ class SCStationForm extends React.Component{
           </View>
         </CardSection>
         <CardSection>
-
-        <ScrollView>
-
           <PickerComp
-          label="Station Type"
+          label="Stations Configuration Profile: "
           itemsData = {this.state.stationsConfigurations}
           onChangeText={(text) => this.setState({stationsConfigurations: text})}
           value={this.state.stationsConfigurations}
           />
-        </ScrollView>
           </CardSection>
           <CardSection>
-            <Text>Envelope:</Text>
+            <PickerComp
+            label="Envelope Profile: "
+            itemsData = {this.state.stationsConfigurations}
+            onChangeText={(text) => this.setState({stationsConfigurations: text})}
+            value={this.state.stationsConfigurations}
+            />
             </CardSection>
+        
         <CardSection>
           <Button
               onPress={this.formSubmit.bind(this)}

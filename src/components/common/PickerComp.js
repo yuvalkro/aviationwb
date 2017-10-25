@@ -26,9 +26,12 @@ class PickerComp extends React.Component{
         <Picker
           style={styles.inputStyle}
            selectedValue={this.state.selectedItem}
-          onValueChange={ (item) => ( this.setState({selectedItem:item}) ) }
+           onValueChange={ (item) => {
+             if (item !== 0) this.setState({selectedItem:item})
+            }
+          }
           >
-
+          <Picker.Item label='Click to choose' value='0' />
          {pickerItems}
         </Picker>
       </View>

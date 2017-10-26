@@ -1,5 +1,29 @@
 import Realm  from 'realm';
 
+class AircraftMaker{}
+
+AircraftMaker.schema = {
+    name:'AircraftMaker',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        makerName : {type: 'string'},
+        makerCode : {type: 'string'},
+    }
+}
+
+class AircraftModel{}
+
+AircraftModel.schema = {
+    name:'AircraftModel',
+    primaryKey: 'id',
+    properties: {
+        id:    'int',    // primary key
+        modelName : {type: 'string'},
+        makerCode : {type: 'string'},
+    }
+}
+
 class Envelope{}
 
 Envelope.schema = {
@@ -35,8 +59,8 @@ Airplane.schema = {
     primaryKey: 'id',
     properties: {
         id:    'int',    // primary key
-        Maker: {type: 'string'},
-        Model: {type: 'string'},
+        maker: {type: 'string'},
+        model: {type: 'string'},
         tailNumbers:    {type:'list', objectType: 'TailNumber'},
     }
 }
@@ -51,8 +75,8 @@ TailNumber.schema = {
         tailNumber: {type: 'string'},
         remark: {type: 'string'},
         emptyWeight: {type: 'string'},
-        emptyWweightArm: {type: 'string'},
-        emptyWweightMoment: {type: 'string'},
+        emptyWeightArm: {type: 'string'},
+        emptyWeightMoment: {type: 'string'},
         scProfile: {type: 'string'},
         envelopeProfile: {type: 'string'},
     }
@@ -125,4 +149,4 @@ class StationWeightUnit{}
      }
  }
 
-export default new Realm({schema: [StationsConfiguration, Station, StationType,StationWeightUnit ]});
+export default new Realm({schema: [StationsConfiguration, Station, StationType,StationWeightUnit ,AircraftMaker,AircraftModel,Airplane,TailNumber]});

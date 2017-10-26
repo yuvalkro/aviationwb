@@ -19,61 +19,23 @@ import realm from './RealmStationsConfiguration';
 			// 	//creating station weight units
 			// 	realm.create('StationWeightUnit', {id: 1 , weightUnit: 'Kilogram'});
 			// 	realm.create('StationWeightUnit', {id: 2 , weightUnit: 'Pounds'});
+      //   //creating aircraft makers
+      //   realm.create('AircraftMaker', {id: 1 , makerName: 'CESSNA', makerCode:'CES'});
+			// 	realm.create('AircraftMaker', {id: 2 , makerName: 'PIPER', makerCode:'PIP'});
+      //   realm.create('AircraftMaker', {id: 3 , makerName: 'BEECHCRAFT', makerCode:'BEE'});
+      //   //creating aircraft models
+      //   realm.create('AircraftModel', {id: 1 , modelName: '160', makerCode:'CES'});
+      //   realm.create('AircraftModel', {id: 2 , modelName: '172', makerCode:'CES'});
+      //   realm.create('AircraftModel', {id: 3 , modelName: '172P', makerCode:'CES'});
+      //   realm.create('AircraftModel', {id: 4 , modelName: '180', makerCode:'CES'});
+      //   realm.create('AircraftModel', {id: 5 , modelName: 'PA-16', makerCode:'PIP'});
+      //   realm.create('AircraftModel', {id: 6 , modelName: 'PA-17', makerCode:'PIP'});
+      //   realm.create('AircraftModel', {id: 7 , modelName: 'Bonanza', makerCode:'BEE'});
+      //   realm.create('AircraftModel', {id: 8 , modelName: 'Baron', makerCode:'BEE'});
 			// });
 
 
-
-
-
 import Reactotron from 'reactotron-react-native'
-
-
-
-var storage = new Storage({
-	// maximum capacity, default 1000
-	size: 1000,
-
-	// Use AsyncStorage for RN, or window.localStorage for web.
-	// If not set, data would be lost after reload.
-	storageBackend: AsyncStorage,
-
-	// expire time, default 1 day(1000 * 3600 * 24 milliseconds).
-	// can be null, which means never expire.
-	defaultExpires: 1000 * 3600 * 24,
-
-	// cache data in the memory. default is true.
-	enableCache: true,
-
-	// if data was not found in storage or expired,
-	// the corresponding sync method will be invoked and return
-	// the latest data.
-	sync : {
-		// we'll talk about the details later.
-	}
-})
-
-
-// Save something with key only.
-// Something more unique, and constantly being used.
-// They are permanently stored unless you remove.
-storage.save({
-	key: 'aircrafts',   // Note: Do not use underscore("_") in key!
-	data: {
-		models: [
-              {key:'Cessna 120',tailNumbers :[{key:'N1234'},{key:'N9234'},{key:'N1217'},{key:'N1288'}]},
-              {key:'Cessna 150a',tailNumbers :[{key:'P1234'},{key:'N9234'},{key:'N1217'}]},
-              {key:'Cessna 172P',tailNumbers :[{key:'A1234'},{key:'N9234'}]},
-              {key:'Cessna 180',tailNumbers :[{key:'Z1234'}]},
-                {key:'Cessna 2180',tailNumbers :[{key:'Z1234'}]},
-                  {key:'Cessna 4180',tailNumbers :[{key:'Z1234'}]},
-            ]
-	},
-
-	// if not specified, the defaultExpires will be applied instead.
-	// if set to null, then it will never expire.
-	expires: 1000 * 3600
-});
-
 
 class HomeScreen extends React.Component{
 
@@ -82,7 +44,8 @@ class HomeScreen extends React.Component{
     this.state = {
       airplanesModels: [],
       modalVisible: false,
-      modalTitle : ''
+      modalTitle : '',
+      airplaneId:''
     };
   }
 
@@ -91,50 +54,21 @@ class HomeScreen extends React.Component{
  		headerTitleStyle: {alignSelf: 'center'},
 	};
 
-	setModalVisible(visible,modalTitle) {
-    this.setState({modalVisible: visible, modalTitle});
+	setModalVisible(visible,modalTitle,airplaneId) {
+    this.setState({modalVisible: visible, modalTitle,airplaneId});
   }
+
+  deleteAirplane(){
+    realm.write(() => {
+      let AirplaneToDelete = realm.objects('Airplane').filtered('id=$0', this.state.airplaneId);
+      realm.delete(AirplaneToDelete);
+    });
+  //this.setState({modalVisible: false, modalTitle:''});
+  }
+
   componentWillMount(){
-
-    // load
-    storage.load({
-    	key: 'aircrafts',
-
-    	// autoSync(default true) means if data not found or expired,
-    	// then invoke the corresponding sync method
-    	autoSync: true,
-
-    	// syncInBackground(default true) means if data expired,
-    	// return the outdated data first while invoke the sync method.
-    	// It can be set to false to always return data provided by sync method when expired.(Of course it's slower)
-    	syncInBackground: true,
-
-    	// you can pass extra params to sync method
-    	// see sync example below for example
-    	syncParams: {
-    	  extraFetchOptions: {
-    	    // blahblah
-    	  },
-    	  someFlag: true,
-    	},
-    }).then(ret => {
-    	// found data go to then()
-      this.setState({airplanesModels:ret.models});
-      console.log(this.state.airplanesModels);
-    }).catch(err => {
-    	// any exception including data not found
-    	// goes to catch()
-    	console.warn(err.message);
-    	switch (err.name) {
-    	    case 'NotFoundError':
-    	        // TODO;
-    	        break;
-            case 'ExpiredError':
-                // TODO
-                break;
-    	}
-    })
-
+      let Airplanes = realm.objects('Airplane');
+      this.setState({airplanesModels : Object.values(Airplanes)});
   }
 
   render(){
@@ -142,6 +76,7 @@ class HomeScreen extends React.Component{
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex:1,  justifyContent: 'flex-start'}}>
+      <Text>{this.state.airplaneId}</Text>
 			<Modal
 				 animationType="fade"
 				 transparent={true}
@@ -184,7 +119,7 @@ class HomeScreen extends React.Component{
             <Text>Setup</Text>
           </Button>
           */}
-          <Button onPress={() => navigate('BuildAircraft')}>
+          <Button onPress={ this.deleteAirplane }>
             <Text>Delete</Text>
           </Button>
             <TouchableHighlight onPress={() => {
@@ -208,9 +143,9 @@ class HomeScreen extends React.Component{
             renderItem={ ({item}) =>
               <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',backgroundColor:'#616160',padding:10,paddingRight: 2}}>
                 <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.key,tailNumbers:item.tailNumbers})}>
-                  <Text style={{fontSize:16,  fontWeight:'500', color :'#fff'}}>{item.key}</Text>
+                  <Text style={{fontSize:16,  fontWeight:'500', color :'#fff'}}>{item.maker + ' ' + item.model}</Text>
                 </TouchableOpacity>
-                <Button onPress={() => {this.setModalVisible(true,item.key)}}>
+                <Button onPress={() => {this.setModalVisible(true,item.maker + ' ' + item.model,item.id)}}>
                   <Text>Actions</Text>
                </Button>
               </View>

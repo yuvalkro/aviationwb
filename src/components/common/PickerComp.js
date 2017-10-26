@@ -7,11 +7,11 @@ class PickerComp extends React.Component{
   //const {label,value,maximumValue,step} = this.props;
   constructor(props) {
      super(props)
-     this.state = { pickerItems: this.props.itemsData , selectedItem :''}
-  }
-
-  getVal(val){
-    //console.warn(val);
+     this.state = {
+       pickerItems:   this.props.itemsData ,
+       selectedValue:this.props.selectedItem,
+       onValueChange: this.props.onValueChange
+     }
   }
 
   render(){
@@ -25,11 +25,12 @@ class PickerComp extends React.Component{
         <Text style={styles.labelStyle} >{this.props.label}</Text>
         <Picker
           style={styles.inputStyle}
-           selectedValue={this.state.selectedItem}
-           onValueChange={ (item) => {
-             if (item !== 0) this.setState({selectedItem:item})
-            }
-          }
+           selectedValue={this.props.selectedItem}
+           onValueChange={this.props.onValueChange}
+          //  onValueChange={ (item) => {
+          //    if (item !== 0) this.setState({selectedItem:item})
+          //   }
+          // }
           >
           <Picker.Item label='Click to choose' value='0' />
          {pickerItems}

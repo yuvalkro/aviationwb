@@ -2,6 +2,7 @@ import React from 'react';
 import {Text,View,ScrollView} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import {Card,CardSection,Button,Input,SliderComp,PickerComp} from './components/common';
+import realm from './RealmStationsConfiguration';
 
 class BuildAircraft extends React.Component{
   static navigationOptions  = {title : 'Build Aircraft',};
@@ -14,10 +15,12 @@ class BuildAircraft extends React.Component{
     //  if(params!=null)
     //     this.state = params.stationData;
     //   else
-        this.state = {
-          maker:'',
-          model:''
-        }
+      this.state = {
+        aircraftMaker:'',
+        aircraftModel:'',
+        aircraftMakers:[],
+        aircraftModels:[]
+      }
   }
   onEmailChange(text){
     this.props.emailChanged(text);
@@ -27,30 +30,73 @@ class BuildAircraft extends React.Component{
     this.props.passwordChanged(text);
   }
 
+  componentWillMount(){
+    //loading aircrafts makers and models
+    let AircraftMaker = realm.objects('AircraftMaker');
+    this.setState({aircraftMakers :  Object.values(AircraftMaker).map((element)=>element.makerName)});
+
+    let AircraftModel = realm.objects('AircraftModel');
+    this.setState({aircraftModels :  Object.values(AircraftModel).map((element)=>element.modelName)});
+  }
+
+  setAircraftModels(makerCode){
+    let AircraftModel = realm.objects('AircraftModel').filtered('makerCode = "'+makerCode+'"' );
+    this.setState({aircraftModels :  Object.values(AircraftModel).map((element)=>element.modelName)});
+  }
 
   formSubmit(){
+    //get next id
 
+    let Airplanes = realm.objects('Airplane');
+
+    let nextId = 1;
+    if(Airplanes.length>0){
+      let id = Airplanes.max("id") ;
+      nextId = id + 1;
+    }
+
+      realm.write(() => {
+        realm.create('Airplane', {
+                                    id: nextId,
+                                    maker: this.state.aircraftMaker,
+                                    model: this.state.aircraftModel
+                                  }
+        );
+      });
+      this.props.navigation.navigate('Home');
   }
 
   render(){
     return(
       <ScrollView>
+      <Text>{this.state.aircraftModels}</Text>
       <View style={{flex:1,padding:5}}>
       <Card>
       <CardSection>
         <PickerComp
         label="Maker: "
-        itemsData = {["Cessna","Piper","Boeing"]}
-        onChangeText={(text) => this.setState({stationsConfigurations: text})}
-        value={this.state.maker}
-        />
+        itemsData = {this.state.aircraftMakers}
+        onValueChange={(item) =>
+          {
+          this.setAircraftModels('CES');
+          this.setState({aircraftMaker:item});
+          }
+        }
+        selectedItem={this.state.aircraftMaker}
+      />
         </CardSection>
         <CardSection>
           <PickerComp
           label="Model: "
-          itemsData = {["172P","180","190"]}
-          onChangeText={(text) => this.setState({stationsConfigurations: text})}
-          value={this.state.model}
+          itemsData = {this.state.aircraftModels}
+          onValueChange={(item) =>
+            {
+            // this.setAircraftModels('CES');
+            // //this.setState({aircraftModels :  ["A","B"]});
+           this.setState({aircraftModel:item});
+            }
+          }
+          selectedItem={this.state.aircraftModel}
           />
           </CardSection>
         <CardSection>
@@ -58,50 +104,16 @@ class BuildAircraft extends React.Component{
             label="Airplane Model"
             description="e.g. Cessna 172P"
             onChangeText={this.onEmailChange.bind(this)}
-            value = {this.props.email}
-          />
-        </CardSection>
-        <CardSection>
-          <SliderComp
-            label="Number of Seats/Paxs/Custom Stations"
-            maximumValue={12}
-            step={1}
-          />
-          </CardSection>
-        <CardSection>
-          <SliderComp
-            label="Number of Baggage Stations"
-            maximumValue={12}
-            step={1}
-          />
-            </CardSection>
-        <CardSection>
-          <SliderComp
-            label="Number of Fuel Stations"
-            maximumValue={6}
-            step={1}
+            value = {this.state.aircraftMaker +' ' + this.state.aircraftModel}
           />
         </CardSection>
 
       <CardSection>
-        <Input
-          label="Maneuvering Speed (Va)"
-          description="Va at Max Gross Weight"
-          onChangeText={this.onEmailChange.bind(this)}
-          value = {this.props.email}
-        />
-      </CardSection>
-      <CardSection>
-        <Input
-          label="Weight of Fuel in 1 Gallon(lbs)"
-          description="e.g. xxxx xxxxx xxxx xxx xxx "
-          onChangeText={this.onEmailChange.bind(this)}
-          value = {this.props.email}
-        />
-      </CardSection>
-      <CardSection>
-        <Button onPress={this.formSubmit.bind(this)}
-        >Save</Button>
+        <Button
+          onPress={this.formSubmit.bind(this)}
+          >
+          Save
+        </Button>
       </CardSection>
       </Card>
       </View>

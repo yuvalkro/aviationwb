@@ -22,7 +22,17 @@ class SCStationForm extends React.Component{
     //     this.state = params.stationData;
     //   else
         this.state = {
-          stationsConfigurations:[]
+          tailNumber: '',
+          remark: '',
+          emptyWeight: '',
+          emptyWeightArm: '',
+          emptyWeightMoment: '',
+          stationsConfigurations: '',
+          envelopeProfile: '',
+          stationsConfigurations:[],
+          envelopeProfiles:[],
+          txt:''
+
         }
   }
 
@@ -35,30 +45,41 @@ class SCStationForm extends React.Component{
       let StationsConfigurations = realm.objects('StationsConfiguration');
       this.setState({stationsConfigurations :  Object.values(StationsConfigurations).map((element)=>element.profileName)});
 
+      let airplaneId = this.props.navigation.state.params.airplaneId
+
+      let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
+
+      this.setState({txt: JSON.stringify(airplane)})
     }
 
 
   formSubmit(){
 
-    let ScSpecificProfileStations = this.props.navigation.state.params.stations
+    let airplaneId = this.props.navigation.state.params.airplaneId
 
-    let station = realm.objects('Station');
+    let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
+
+    let tailNumbers = airplane.tailNumbers;
 
     let nextId = 1;
-    if(station.length>0){
-    let id = station.max("id") ;
+    if(tailNumbers.length>0){
+    let id = tailNumbers.max("id") ;
     nextId = id + 1;
     }
 
-    let newStation = {
+    let newTailNumber = {
      id:nextId,
-     stationName:this.state.stationName,
-     maxWeight:67,
-     stationArm:43,
+     tailNumber:this.state.tailNumber,
+     remark: this.state.remark,
+     emptyWeight: 1200 ,
+     emptyWeightArm: 50,
+     emptyWeightMoment: 3000,
+     scProfile: 1,
+     envelopeProfile: 1,
     }
     realm.write(() => {
-        ScSpecificProfileStations.push(newStation);
-        this.props.navigation.navigate('StationsConfigurationSpecificList',{profileName :this.props.navigation.state.params.ScProfileName,stations:ScSpecificProfileStations});
+        tailNumbers.push(newTailNumber);
+        this.props.navigation.navigate('TailNumbersList',{profileName :this.props.navigation.state.params.ScProfileName,stations:ScSpecificProfileStations});
     });
   }
 
@@ -66,13 +87,14 @@ class SCStationForm extends React.Component{
     return(
       <ScrollView>
       <View style={{padding:2}}>
+      <Text>{this.state.txt}</Text>
       <Card>
         <CardSection>
           <Input
           label="Tail Number:"
           description="e.g. N12345"
-          onChangeText={(text) => this.setState({stationName: text})}
-          value={this.state.stationName}
+          onChangeText={(text) => this.setState({tailNumber: text})}
+          value={this.state.tailNumber}
           />
         </CardSection>
 
@@ -80,29 +102,29 @@ class SCStationForm extends React.Component{
           <Input
             label="Remark:"
             description="(Optional)"
-            onChangeText={(text) => this.setState({maxWeight: text})}
-            value={this.state.maxWeight+''}
+            onChangeText={(text) => this.setState({remark: text})}
+            value={this.state.remark+''}
           />
         </CardSection>
         <CardSection>
           <Input
             label="Empty Weight:"
-            onChangeText={(text) => this.setState({stationArm: text})}
-            value={this.state.stationArm+''}
+            onChangeText={(text) => this.setState({emptyWeight: text})}
+            value={this.state.emptyWeight+''}
           />
         </CardSection>
         <CardSection>
         <View style={{flex:1,flexDirection:'row'}}>
           <Input
             label="Empty Weight Arm:"
-            onChangeText={(text) => this.setState({stationArm: text})}
-            value={this.state.stationArm+''}
+            onChangeText={(text) => this.setState({emptyWeightArm: text})}
+            value={this.state.emptyWeightArm+''}
           />
           <Text>OR</Text>
           <Input
             label="Empty Weight Moment:"
-            onChangeText={(text) => this.setState({stationArm: text})}
-            value={this.state.stationArm+''}
+            onChangeText={(text) => this.setState({emptyWeightMoment: text})}
+            value={this.state.emptyWeightMoment+''}
           />
           </View>
         </CardSection>
@@ -110,19 +132,19 @@ class SCStationForm extends React.Component{
           <PickerComp
           label="Stations Configuration Profile: "
           itemsData = {this.state.stationsConfigurations}
-          onChangeText={(text) => this.setState({stationsConfigurations: text})}
-          value={this.state.stationsConfigurations}
+          onChangeText={(text) => this.setState({stationsConfiguration: text})}
+          value={this.state.stationsConfiguration}
           />
           </CardSection>
           <CardSection>
             <PickerComp
             label="Envelope Profile: "
-            itemsData = {this.state.stationsConfigurations}
-            onChangeText={(text) => this.setState({stationsConfigurations: text})}
-            value={this.state.stationsConfigurations}
+            itemsData = {this.state.envelopeProfiles}
+            onChangeText={(text) => this.setState({envelopeProfile: text})}
+            value={this.state.envelopeProfile}
             />
             </CardSection>
-        
+
         <CardSection>
           <Button
               onPress={this.formSubmit.bind(this)}

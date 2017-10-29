@@ -6,7 +6,7 @@ import { AsyncStorage } from 'react-native';
 import {Card,CardSection,Input} from './components/common';
 import realm from './RealmStationsConfiguration';
 
-class StationsConfigurationsList extends React.Component{
+class SCProfileForm extends React.Component{
 
   constructor(props) {
      super(props)
@@ -39,14 +39,14 @@ class StationsConfigurationsList extends React.Component{
      const { params } = this.props.navigation.state;
      const { navigate } = this.props.navigation;
     return(
-      <View>
+      <View style={{flex:1,flexDirection:'column',justifyContent:'flex-start'}}>
         <Card>
           <CardSection>
             <Input
-            label="Profile Name"
-            description="e.g. Main Profile"
-            onChangeText={(text) => this.setState({profileName: text})}
-            value={this.state.profileName}
+              label="Profile Name"
+              description="e.g. Main Profile"
+              onChangeText={(text) => this.setState({profileName: text})}
+              value={this.state.profileName}
             />
           </CardSection>
           <CardSection>
@@ -61,4 +61,4 @@ class StationsConfigurationsList extends React.Component{
   }
 }
 
-export default StationsConfigurationsList;
+export default SCProfileForm;

@@ -102,12 +102,16 @@ class HomeScreen extends React.Component{
            <Button onPress={() => navigate('StationsConfigurationsList')}>
              <Text>Envelope Profiles</Text>
            </Button>
-           <Button onPress={() => navigate('StationsConfigurationsList')}>
+           <Button onPress={() => {
+               this.setState({modalVisible:false});
+              navigate('StationsConfigurationsList')
+              }
+            }>
              <Text>Stations Configurations</Text>
            </Button>
           <Button onPress={() => {
               this.setState({modalVisible:false});
-              navigate('TailNumberForm');
+              navigate('TailNumberForm',{airplaneId:this.state.airplaneId});
             }
           }>
             <Text>Add Tail Number</Text>

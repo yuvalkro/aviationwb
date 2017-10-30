@@ -18,7 +18,7 @@ class TailNumbersList extends React.Component{
             />
             <FlatList
               data={params.tailNumbers}
-              renderItem={ ({item}) => <Text style={{fontSize:18, padding: 8}}>{item.key}</Text>}
+              renderItem={ ({item}) => <Text style={{fontSize:18, padding: 8}}>{item.tailNumber}</Text>}
 
             />
       </View>

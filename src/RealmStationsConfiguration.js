@@ -61,7 +61,7 @@ Airplane.schema = {
         id:    'int',    // primary key
         maker: {type: 'string'},
         model: {type: 'string'},
-        tailNumbers:    {type:'list', objectType: 'TailNumber'},
+        tailNumbers:{type:'list', objectType: 'TailNumber'},
     }
 }
 

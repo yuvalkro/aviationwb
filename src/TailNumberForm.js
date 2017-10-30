@@ -30,9 +30,7 @@ class SCStationForm extends React.Component{
           stationsConfigurations: '',
           envelopeProfile: '',
           stationsConfigurations:[],
-          envelopeProfiles:[],
-          txt:''
-
+          envelopeProfiles:[]
         }
   }
 
@@ -45,11 +43,10 @@ class SCStationForm extends React.Component{
       let StationsConfigurations = realm.objects('StationsConfiguration');
       this.setState({stationsConfigurations :  Object.values(StationsConfigurations).map((element)=>element.profileName)});
 
-      let airplaneId = this.props.navigation.state.params.airplaneId
+    //  let airplaneId = this.props.navigation.state.params.airplaneId
 
-      let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
+    //  let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
 
-      this.setState({txt: JSON.stringify(airplane)})
     }
 
 
@@ -59,35 +56,35 @@ class SCStationForm extends React.Component{
 
     let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
 
-    let tailNumbers = airplane.tailNumbers;
+    let tailNumbersForSpecific = airplane[0].tailNumbers;
+    let tailNumbers = realm.objects('TailNumber');
 
     let nextId = 1;
     if(tailNumbers.length>0){
-    let id = tailNumbers.max("id") ;
-    nextId = id + 1;
+      let id = tailNumbers.max("id") ;
+      nextId = id + 1;
     }
 
     let newTailNumber = {
      id:nextId,
      tailNumber:this.state.tailNumber,
      remark: this.state.remark,
-     emptyWeight: 1200 ,
-     emptyWeightArm: 50,
-     emptyWeightMoment: 3000,
-     scProfile: 1,
-     envelopeProfile: 1,
+     emptyWeight: '1200' ,
+     emptyWeightArm: '50',
+     emptyWeightMoment: '3000',
+     scProfile: '1',
+     envelopeProfile: '1',
     }
     realm.write(() => {
-        tailNumbers.push(newTailNumber);
-        this.props.navigation.navigate('TailNumbersList',{profileName :this.props.navigation.state.params.ScProfileName,stations:ScSpecificProfileStations});
+        tailNumbersForSpecific.push(newTailNumber);
     });
+    this.props.navigation.navigate('Home',{airplaneModel :airplane[0].maker+ ' ' + airplane[0].model});
   }
 
   render(){
     return(
       <ScrollView>
       <View style={{padding:2}}>
-      <Text>{this.state.txt}</Text>
       <Card>
         <CardSection>
           <Input
@@ -144,8 +141,7 @@ class SCStationForm extends React.Component{
             value={this.state.envelopeProfile}
             />
             </CardSection>
-
-        <CardSection>
+            <CardSection>
           <Button
               onPress={this.formSubmit.bind(this)}
           >Save</Button>

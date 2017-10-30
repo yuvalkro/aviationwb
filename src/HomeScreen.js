@@ -145,13 +145,22 @@ class HomeScreen extends React.Component{
             ItemSeparatorComponent={ () => <View style={ { height: 1 } } /> }
             data={this.state.airplanesModels}
             renderItem={ ({item}) =>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',backgroundColor:'#616160',padding:10,paddingRight: 2}}>
-                <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.key,tailNumbers:item.tailNumbers})}>
+              <View style={{flex: 1, flexDirection: 'column'}}>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',alignItems:'center',backgroundColor:'#616160',padding:10,paddingRight: 2}}>
+                <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.maker+ ' ' + item.model,tailNumbers:item.tailNumbers})}>
                   <Text style={{fontSize:16,  fontWeight:'500', color :'#fff'}}>{item.maker + ' ' + item.model}</Text>
                 </TouchableOpacity>
                 <Button onPress={() => {this.setModalVisible(true,item.maker + ' ' + item.model,item.id)}}>
                   <Text>Actions</Text>
                </Button>
+               </View>
+               <View>
+               <FlatList
+                 data={item.tailNumbers}
+                 renderItem={ ({item}) => <Text style={{fontSize:16, padding: 8,paddingLeft:28}}>{item.tailNumber}</Text>}
+                 keyExtractor={(item, index) => index}
+               />
+               </View>
               </View>
             }
 						keyExtractor={(item, index) => index}

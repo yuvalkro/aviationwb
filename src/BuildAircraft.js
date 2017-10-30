@@ -59,7 +59,8 @@ class BuildAircraft extends React.Component{
         realm.create('Airplane', {
                                     id: nextId,
                                     maker: this.state.aircraftMaker,
-                                    model: this.state.aircraftModel
+                                    model: this.state.aircraftModel,
+                                    tailNumbers :[]
                                   }
         );
       });

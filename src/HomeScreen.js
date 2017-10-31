@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableHighlight,Modal,View,Text,FlatList, TouchableOpacity} from 'react-native';
+import {TouchableHighlight,Modal,View,Text,FlatList, TouchableOpacity,Image} from 'react-native';
 import {Button} from './components/common';
 import {StackNavigator} from 'react-navigation';
 import Storage from 'react-native-storage';
@@ -67,7 +67,7 @@ class HomeScreen extends React.Component{
   }
 
   componentWillMount(){
-      let Airplanes = realm.objects('Airplane');
+      let Airplanes = realm.objects('Airplane').sorted(['maker','model']);
       this.setState({airplanesModels : Object.values(Airplanes)});
   }
 
@@ -99,7 +99,11 @@ class HomeScreen extends React.Component{
            <Button onPress={() => navigate('BuildAircraft')}>
              <Text>General Info</Text>
            </Button>
-           <Button onPress={() => navigate('StationsConfigurationsList')}>
+           <Button onPress={() => {
+              this.setState({modalVisible:false});
+              navigate('EnvelopeForm')}
+           }
+           >
              <Text>Envelope Profiles</Text>
            </Button>
            <Button onPress={() => {
@@ -157,7 +161,16 @@ class HomeScreen extends React.Component{
                <View>
                <FlatList
                  data={item.tailNumbers}
-                 renderItem={ ({item}) => <Text style={{fontSize:16, padding: 8,paddingLeft:28}}>{item.tailNumber}</Text>}
+                 renderItem={ ({item}) =>
+                   <View style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}>
+                    <Text style={{fontSize:16, padding: 8,paddingLeft:28}}>{item.tailNumber}</Text>
+                    <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',padding:8}}>
+                      <Image style={styles.iconStyle} source={require('../img/icons/icons-add-to-favorites.png')} />
+                      <Image style={styles.iconStyle} source={require('../img/icons/icons-settings.png')} />
+                      <Image style={styles.iconStyle} source={require('../img/icons/icons-trash.png')} />
+                    </View>
+                  </View>
+                }
                  keyExtractor={(item, index) => index}
                />
                </View>
@@ -181,6 +194,10 @@ const styles = {
     paddingRight:14,
     paddingLeft:14
   },
+  iconStyle:{
+    width:25,
+    height:25
+  }
 }
 
 export default HomeScreen;

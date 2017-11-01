@@ -32,7 +32,7 @@ Envelope.schema = {
     properties: {
         id:    'int',    // primary key
         profileName : {type: 'string'},
-        MaxRampWeight: {type: 'string'},
+        maxRampWeight: {type: 'string'},
         weightUnit: {type: 'string'},
         armUnit: {type: 'string'},
         xAxisUseMoment : {type: 'string'},
@@ -61,6 +61,8 @@ Airplane.schema = {
         id:    'int',    // primary key
         maker: {type: 'string'},
         model: {type: 'string'},
+        envelopes:{type:'list', objectType: 'Envelope'},
+        stationsConfigurations:{type:'list', objectType: 'StationsConfiguration'},
         tailNumbers:{type:'list', objectType: 'TailNumber'},
     }
 }
@@ -149,4 +151,4 @@ class StationWeightUnit{}
      }
  }
 
-export default new Realm({schema: [StationsConfiguration, Station, StationType,StationWeightUnit ,AircraftMaker,AircraftModel,Airplane,TailNumber]});
+export default new Realm({schema: [StationsConfiguration, Station, StationType,StationWeightUnit ,AircraftMaker,AircraftModel,Airplane,TailNumber,Envelope,EnvelopeLayer]});

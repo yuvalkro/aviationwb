@@ -11,7 +11,7 @@ import SCProfileForm from './src/SCProfileForm';
 import AirplaneSetupScreen from './src/AirplaneSetupScreen';
 import TailNumberForm from './src/TailNumberForm';
 import EnvelopeForm from './src/EnvelopeForm';
-
+import EnvelopeProfilesList from './src/EnvelopeProfilesList';
 
 
 
@@ -25,7 +25,8 @@ export default aviationwb = StackNavigator({
   SCProfileForm : {screen: SCProfileForm},
   AirplaneSetupScreen : {screen:AirplaneSetupScreen},
   TailNumberForm : {screen:TailNumberForm},
-  EnvelopeForm : {screen:EnvelopeForm}
+  EnvelopeForm : {screen:EnvelopeForm},
+  EnvelopeProfilesList: {screen:EnvelopeProfilesList},
 });
 
 AppRegistry.registerComponent('aviationwb',() => aviationwb);

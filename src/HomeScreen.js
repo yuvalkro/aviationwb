@@ -45,7 +45,8 @@ class HomeScreen extends React.Component{
       airplanesModels: [],
       modalVisible: false,
       modalTitle : '',
-      airplaneId:''
+      airplaneId:'',
+      airplane:{}
     };
   }
 
@@ -76,7 +77,7 @@ class HomeScreen extends React.Component{
     const { navigate } = this.props.navigation;
     return(
       <View style={{flex:1,  justifyContent: 'flex-start'}}>
-      <Text>{this.state.airplaneId}</Text>
+      {/* <Text>{JSON.stringify(this.state.airplane)}</Text> */}
 			<Modal
 				 animationType="fade"
 				 transparent={true}
@@ -101,14 +102,14 @@ class HomeScreen extends React.Component{
            </Button>
            <Button onPress={() => {
               this.setState({modalVisible:false});
-              navigate('EnvelopeForm')}
-           }
-           >
+              navigate('EnvelopeProfilesList',{envelopes:this.state.airplane.envelopes})
+              }
+             }>
              <Text>Envelope Profiles</Text>
            </Button>
            <Button onPress={() => {
                this.setState({modalVisible:false});
-              navigate('StationsConfigurationsList')
+              navigate('StationsConfigurationsList',{envelopes:this.state.airplane.envelopes})
               }
             }>
              <Text>Stations Configurations</Text>
@@ -139,10 +140,26 @@ class HomeScreen extends React.Component{
 				 </View>
 				</View>
 			 </Modal>
-
-          <Button onPress={() => navigate('BuildAircraft')}>
-            <Text>Build Your Airplane</Text>
-          </Button>
+       <View style={{ flexDirection:'row',justifyContent: 'space-between',padding:25}}>
+        <TouchableHighlight onPress={() => navigate('BuildAircraft')}>
+          <View>
+            <Image style={styles.bigIconStyle} source={require('../img/icons/build_aircraft.png')} />
+            <Text>Build Your {"\n"}Airplane</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigate('BuildAircraft')}>
+          <View>
+          <Image style={styles.bigIconStyle} source={require('../img/icons/template_library.png')} />
+            <Text>Templates {"\n"}Library</Text>
+            </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigate('BuildAircraft')}>
+          <View>
+          <Image style={styles.bigIconStyle} source={require('../img/icons/help.png')} />
+            <Text>Help</Text>
+            </View>
+        </TouchableHighlight>
+      </View>
 
           <FlatList
             //data={[{key:'Cessna 120'},{key:'Cessna 150a'},{key:'Cessna 172P'},{key:'Cessna 180'}]}
@@ -154,7 +171,11 @@ class HomeScreen extends React.Component{
                 <TouchableOpacity onPress={() => navigate('TailNumbers',{airplaneModel :item.maker+ ' ' + item.model,tailNumbers:item.tailNumbers})}>
                   <Text style={{fontSize:16,  fontWeight:'500', color :'#fff'}}>{item.maker + ' ' + item.model}</Text>
                 </TouchableOpacity>
-                <Button onPress={() => {this.setModalVisible(true,item.maker + ' ' + item.model,item.id)}}>
+                <Button onPress={() => {
+                    this.setModalVisible(true,item.maker + ' ' + item.model,item.id)
+                    this.setState({airplane:item})
+                    }
+                  }>
                   <Text>Actions</Text>
                </Button>
                </View>
@@ -163,11 +184,14 @@ class HomeScreen extends React.Component{
                  data={item.tailNumbers}
                  renderItem={ ({item}) =>
                    <View style={{flex:1,flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:16, padding: 8,paddingLeft:28}}>{item.tailNumber}</Text>
+                    <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',padding:8}}>
+                      <Image style={styles.iconStyle} source={require('../img/icons/tail_number.png')} />
+                      <Text style={{fontSize:16, padding: 2}}>{item.tailNumber}</Text>
+                    </View>
                     <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',padding:8}}>
-                      <Image style={styles.iconStyle} source={require('../img/icons/icons-add-to-favorites.png')} />
-                      <Image style={styles.iconStyle} source={require('../img/icons/icons-settings.png')} />
-                      <Image style={styles.iconStyle} source={require('../img/icons/icons-trash.png')} />
+                      <Image style={styles.iconStyle} source={require('../img/icons/empty_star.png')} />
+                      <Image style={styles.iconStyle} source={require('../img/icons/setup.png')} />
+                      <Image style={styles.iconStyle} source={require('../img/icons/trash.png')} />
                     </View>
                   </View>
                 }
@@ -197,6 +221,10 @@ const styles = {
   iconStyle:{
     width:25,
     height:25
+  },
+  bigIconStyle:{
+    width:50,
+    height:50
   }
 }
 

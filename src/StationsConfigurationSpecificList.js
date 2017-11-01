@@ -1,8 +1,6 @@
 import React from 'react';
 import {View,Text,FlatList,Button,TouchableOpacity} from 'react-native';
 import {StackNavigator} from 'react-navigation';
-import Storage from 'react-native-storage';
-import { AsyncStorage } from 'react-native';
 import realm from './RealmStationsConfiguration';
 
 class StationsConfigurationsList extends React.Component{
@@ -30,6 +28,7 @@ class StationsConfigurationsList extends React.Component{
      const { navigate } = this.props.navigation;
     return(
       <View>
+      <Text>{JSON.stringify(params.stations)}</Text>
       <Button
         onPress={() => navigate('SCStationForm',{ScProfileName : params.profileName,stations:params.stations})}
         title="Add Station"

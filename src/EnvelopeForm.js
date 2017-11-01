@@ -11,6 +11,10 @@ class EnvelopeForm extends React.Component{
   static navigationOptions  = {
       title : 'New Envelope',
       headerTitleStyle: {alignSelf: 'center'},
+      headerLeft:
+      <TouchableOpacity style={{paddingRight:5}} onPress={() => navigation.navigate('EnvelopeForm',{})}>
+        <Text>Done</Text>
+    </TouchableOpacity>
     };
 
   constructor(props) {
@@ -22,63 +26,45 @@ class EnvelopeForm extends React.Component{
     //     this.state = params.stationData;
     //   else
         this.state = {
-          tailNumber: '',
-          remark: '',
-          emptyWeight: '',
-          emptyWeightArm: '',
-          emptyWeightMoment: '',
-          stationsConfigurations: '',
-          envelopeProfile: '',
-          stationsConfigurations:[],
-          envelopeProfiles:[]
+          profileName: '',
+          maxRampWeight: '',
+          weightUnit: '',
+          armUnit: '',
+          xAxisUseMoment: '',
+          envelopeLayers:[],
         }
   }
 
-  setModalVisible(visible,modalTitle) {
-    this.setState({modalVisible: visible, modalTitle});
+getNextId(schemaName){
+  let tailNumbers = realm.objects(schemaName);
+  let nextId = 1;
+  if(tailNumbers.length>0){
+    let id = tailNumbers.max("id") ;
+    nextId = id + 1;
   }
+  return nextId;
+}
 
-    componentWillMount(){
-      //loading exsiting profiles
-      let StationsConfigurations = realm.objects('StationsConfiguration');
-      this.setState({stationsConfigurations :  Object.values(StationsConfigurations).map((element)=>element.profileName)});
-
-    //  let airplaneId = this.props.navigation.state.params.airplaneId
-
-    //  let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
-
-    }
-
+componentWillMount(){}
 
   formSubmit(){
 
-    let airplaneId = this.props.navigation.state.params.airplaneId
+    let envelopesForSpecific =  this.props.navigation.state.params.envelopes
 
-    let airplane = realm.objects('Airplane').filtered('id=$0',airplaneId);
+    let id = this.getNextId("Envelope");
 
-    let tailNumbersForSpecific = airplane[0].tailNumbers;
-    let tailNumbers = realm.objects('TailNumber');
-
-    let nextId = 1;
-    if(tailNumbers.length>0){
-      let id = tailNumbers.max("id") ;
-      nextId = id + 1;
-    }
-
-    let newTailNumber = {
-     id:nextId,
-     profileName:this.state.profileName,
+    let newEnvelope = {
+     id:id,
+     profileName:   this.state.profileName ,
      maxRampWeight: this.state.maxRampWeight,
-     emptyWeight: '1200' ,
-     emptyWeightArm: '50',
-     emptyWeightMoment: '3000',
-     scProfile: '1',
-     envelopeProfile: '1',
+     weightUnit:    this.state.weightUnit,
+     armUnit:       this.state.armUnit,
+     xAxisUseMoment:this.state.xAxisUseMoment,
     }
     realm.write(() => {
-        tailNumbersForSpecific.push(newTailNumber);
+        envelopesForSpecific.push(newEnvelope);
     });
-    this.props.navigation.navigate('Home',{airplaneModel :airplane[0].maker+ ' ' + airplane[0].model});
+    this.props.navigation.navigate('EnvelopeProfilesList',{envelopes :envelopesForSpecific});
   }
 
   render(){
@@ -89,62 +75,37 @@ class EnvelopeForm extends React.Component{
         <CardSection>
           <Input
           label="Profile Name:"
-          description="Default Envelope"
-          onChangeText={(text) => this.setState({maxRampWeight: text})}
-          value={this.state.maxRampWeight}
+          onChangeText={(text) => this.setState({profileName: text})}
+          value={this.state.profileName}
           />
         </CardSection>
 
         <CardSection>
           <Input
             label="Max Ramp Weight:"
-            description="(Optional)"
             onChangeText={(text) => this.setState({maxRampWeight: text})}
             value={this.state.maxRampWeight+''}
           />
         </CardSection>
         <CardSection>
           <Input
-            label="Empty Weight:"
-            onChangeText={(text) => this.setState({emptyWeight: text})}
-            value={this.state.emptyWeight+''}
+            label="Weight Unit:"
+            onChangeText={(text) => this.setState({weightUnit: text})}
+            value={this.state.weightUnit}
           />
         </CardSection>
         <CardSection>
-        <View style={{flex:1,flexDirection:'row'}}>
           <Input
-            label="Empty Weight Arm:"
-            onChangeText={(text) => this.setState({emptyWeightArm: text})}
-            value={this.state.emptyWeightArm+''}
-          />
-          <Text>OR</Text>
-          <Input
-            label="Empty Weight Moment:"
-            onChangeText={(text) => this.setState({emptyWeightMoment: text})}
-            value={this.state.emptyWeightMoment+''}
-          />
-          </View>
-        </CardSection>
-        <CardSection>
-          <PickerComp
-          label="Stations Configuration Profile: "
-          itemsData = {this.state.stationsConfigurations}
-          onChangeText={(text) => this.setState({stationsConfiguration: text})}
-          value={this.state.stationsConfiguration}
-          />
-          </CardSection>
-          <CardSection>
-            <PickerComp
-            label="Envelope Profile: "
-            itemsData = {this.state.envelopeProfiles}
-            onChangeText={(text) => this.setState({envelopeProfile: text})}
-            value={this.state.envelopeProfile}
+            label="Arm Unit:"
+            onChangeText={(text) => this.setState({armUnit: text})}
+            value={this.state.armUnit}
             />
-            </CardSection>
+        </CardSection>
+
             <CardSection>
-          <Button
-              onPress={this.formSubmit.bind(this)}
-          >Save</Button>
+          <Button onPress={this.formSubmit.bind(this)}>
+            Save
+          </Button>
         </CardSection>
       </Card>
       </View>
